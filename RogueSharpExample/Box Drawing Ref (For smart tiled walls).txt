@@ -1,0 +1,10 @@
+﻿Box drawing characters
+
+  dec  hex
+║(186)(BA) Vertical
+╝(187)(BB) Bottom Right
+╗(188)(BC) Top Right
+╚(200)(C8) Bottom Left
+╔(201)(C9) Top Left
+═(205)(CD) Horizontal
+
