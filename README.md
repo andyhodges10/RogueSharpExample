@@ -1,2 +1,2 @@
 # RogueSharpExample
-Just following and expanding the RogueSharpTutorial RLNET tutorial found at https://roguesharp.wordpress.com/
+Just following and expanding on the RogueSharpTutorial RLNET tutorial found at https://roguesharp.wordpress.com/ Currently this adds leveling up, bosses, NPCs that offers hints, actor specfic lines and Magical equipment among a few other things. I am currently looking into shopkeepers actually doing more then open up a blank window, tiles getting slightly dimmer over distance in FOV and tiled walls.
