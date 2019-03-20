@@ -10,6 +10,8 @@ namespace RogueSharpExample.Items
         {
             Name = "Wand of Destruction";
             RemainingUses = 3;
+            Value = 75;
+            Symbol = '/';
         }
 
         protected override bool UseItem()
@@ -18,7 +20,7 @@ namespace RogueSharpExample.Items
             Player player = Game.Player;
             Point edgePoint = GetRandomEdgePoint(map);
 
-            Game.MessageLog.Add($"{player.Name} uses a {Name} and chaotically unleashes a void beam");
+            Game.MessageLog.Add($"You use a {Name} and chaotically unleashes a void beam");
             Actor voidAttackActor = new Actor
             {
                 Attack = 12,

@@ -3,6 +3,7 @@ using RogueSharpExample.Core;
 using RogueSharpExample.Interfaces;
 using RogueSharpExample.Equipment;
 using RogueSharpExample.Abilities; // debug
+using RogueSharpExample.Items;
 
 namespace RogueSharpExample.Systems
 {
@@ -68,6 +69,7 @@ namespace RogueSharpExample.Systems
                 {
                     Game.IsInventoryScreenShowing = true;
                     Game.TogglePopupScreen();
+                    didPlayerAct = true;
                 }
                 else if (keyPress.Key == RLKey.Escape) // hp Fixme. Implement main menu
                 {
@@ -76,16 +78,18 @@ namespace RogueSharpExample.Systems
                 else if (keyPress.Key == RLKey.Insert) // hp Debug
                 {
                     Game.MoveDownDungeonLevel();
+
                     messageLog.Add("You Cheater! Instantly went to next Dungeon", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
-                else if (keyPress.Key == RLKey.Home) // hp Debug
+                else if (keyPress.Key == RLKey.Home) // Debug
                 {
                     player.LevelUp();
-                    messageLog.Add("Cheater: Instant levelUp", Swatch.DbBlood);
+
+                    messageLog.Add("You Cheater! Instant levelUp", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
-                else if (keyPress.Key == RLKey.PageUp) // hp Debug
+                else if (keyPress.Key == RLKey.PageUp) // Debug
                 {
                     player.Body = BodyEquipment.DragonLord();
                     player.Feet = FeetEquipment.Mithril();
@@ -94,31 +98,47 @@ namespace RogueSharpExample.Systems
                     player.Health = player.MaxHealth;
                     player.Mana = player.MaxMana;
                     player.IsPoisonedImmune = player.Body.GrantsPoisonImmunity;
-                    messageLog.Add("You Cheater! Best equipment given", Swatch.DbBlood);
+                    WeaponScroll weaponScroll = new WeaponScroll();
+                    ArmorScroll armorScroll = new ArmorScroll();
+                    BookOfWhirlwind bookOfWhirlwind = new BookOfWhirlwind(4);
+                    player.Inventory.AddInventoryItem(weaponScroll);
+                    player.Inventory.AddInventoryItem(armorScroll);
+                    player.Inventory.AddInventoryItem(bookOfWhirlwind);
+
+                    messageLog.Add("You Cheater! Best equipment and inventory items given", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
-                else if (keyPress.Key == RLKey.Delete) // hp Debug
+                else if (keyPress.Key == RLKey.Delete) // Debug
                 {
+                    messageLog.Add("Debug: Poisoned for 4 turns and hunger set to low", Swatch.DbBlood);
+                    player.Hunger = 50;
                     if (player.IsPoisonedImmune == false)
                     {
                         player.State = new AbnormalState(4, "Poisoned", -1, -1, 3);
-                        messageLog.Add("Debug: Poisoned for 4 turns", Swatch.DbBlood);
                     }
                     else
                     {
-                        messageLog.Add("Debug: Player is immune to poison", Swatch.DbBlood);
+                        messageLog.Add("Which you are immune to", Swatch.DbBlood);
                     }
                     didPlayerAct = true;
                 }
-                else if (keyPress.Key == RLKey.End) // hp Debug
+                else if (keyPress.Key == RLKey.End) // Debug
                 {
-                    player.Hunger = 50;
-                    messageLog.Add("Debug: Player hunger set to low", Swatch.DbBlood);
+                    FoodRation foodRation = new FoodRation(3);
+                    RevealMapScroll revealMapScroll = new RevealMapScroll();
+                    SerpentWand serpentWand = new SerpentWand(3);
+                    PoisonFlask poisonFlask = new PoisonFlask(3);
+                    player.Inventory.AddInventoryItem(foodRation);
+                    player.Inventory.AddInventoryItem(revealMapScroll);
+                    player.Inventory.AddInventoryItem(serpentWand);
+                    player.Inventory.AddInventoryItem(poisonFlask);
+                    messageLog.Add("You Cheater! Rare Inventory items given", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
-                else if (keyPress.Key == RLKey.PageDown) // hp Debug
+                else if (keyPress.Key == RLKey.PageDown) // Debug
                 {
-                    player.Hunger = 1000;
+                    player.Hunger = 1200;
+
                     messageLog.Add("You Cheater! Hunger set to full", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
@@ -132,7 +152,7 @@ namespace RogueSharpExample.Systems
         }
     }
 
-    public class InputSystemPopupScreen : IInputSystem // hp refactor me
+    public class InputSystemPopupScreen : IInputSystem // hp complete me
     {
         public bool GetInput(RLRootConsole rootConsole, CommandSystem commandSystem)
         {
@@ -158,20 +178,35 @@ namespace RogueSharpExample.Systems
                     Game.IsInventoryScreenShowing = false;
                     Game.TogglePopupScreen();
                 }
-                else if (exitMenu && Game.IsShopScreenShowing == true)
-                {
-                    Game.IsShopScreenShowing = false;
-                    Game.TogglePopupScreen();
-                }
                 else if (exitMenu && Game.IsDialogScreenShowing == true)
                 {
                     Game.IsDialogScreenShowing = false;
                     Game.TogglePopupScreen();
                 }
+                else if (exitMenu && Game.IsShopSelectionScreenShowing == true)
+                {
+                    Game.IsShopSelectionScreenShowing = false;
+                    Game.TogglePopupScreen();
+                }
+                else if (exitMenu && Game.IsBuyScreenShowing == true)
+                {
+                    Game.IsBuyScreenShowing = false;
+                    Game.TogglePopupScreen();
+                }
+                else if (exitMenu && Game.IsSellScreenShowing == true)
+                {
+                    Game.IsSellScreenShowing = false;
+                    Game.TogglePopupScreen();
+                }
 
-                if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString())) // hp fix me
+                if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString()) && Game.IsInventoryScreenShowing == true)
                 {
                     return commandSystem.UseItemInInventory(Game.Player.Inventory, commandChar);
+                }
+
+                if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString()) && Game.IsSellScreenShowing == true)
+                {
+                    return commandSystem.SellItemInInventory(Game.Player.Inventory, commandChar);
                 }
             }
 

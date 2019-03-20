@@ -1,0 +1,26 @@
+﻿using RogueSharpExample.Interfaces;
+
+namespace RogueSharpExample.Core
+{
+    public class TreasurePile
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public ITreasure Treasure { get; set; }
+
+        public string Name { get; protected set; }
+
+        public TreasurePile(int x, int y, ITreasure treasure)
+        {
+            X = x;
+            Y = y;
+            Treasure = treasure;
+
+            if (treasure is IDrawable drawableTreasure)
+            {
+                drawableTreasure.X = x;
+                drawableTreasure.Y = y;
+            }
+        }
+    }
+}

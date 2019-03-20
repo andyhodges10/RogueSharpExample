@@ -24,12 +24,12 @@ namespace RogueSharpExample.Items
             }
             else
             {
-                int healAmount = Dice.Roll("4D3") + 5; // improved: Dice.Roll("5D4") + 5;
+                int healAmount = Dice.Roll("4D3") + 4; // improved: Dice.Roll("5D4") + 5;
                 Game.MessageLog.Add($"You consume a {Name} and recovers {healAmount} health", Colors.Healing);
-                Heal heal = new Heal(healAmount, 0, 0, "Heal");
+                RegainHP regainHP = new RegainHP(healAmount, 0);
                 RemainingUses--;
 
-                return heal.Perform();
+                return regainHP.Perform();
             }
         }
     }

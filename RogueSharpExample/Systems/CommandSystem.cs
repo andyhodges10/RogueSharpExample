@@ -83,14 +83,15 @@ namespace RogueSharpExample.Systems
             Actor shopkeeper = Game.DungeonMap.GetShopkeeperAt(x, y);
             if (shopkeeper != null) // debug
             {
-                Game.MessageLog.Add("Whatcha buying? (Debug)");
-                Game.IsShopScreenShowing = true;
+                Game.MessageLog.Add("What are you selling? (Debug)");
+                Game.IsSellScreenShowing = true; // debug
+                //Game.IsShopSelectionScreenShowing = true;
                 Game.TogglePopupScreen();
                 return true;
             }
 
             Actor explorer = Game.DungeonMap.GetExplorerAt(x, y);
-            if (explorer != null) // debug
+            if (explorer != null)
             {
                 if (explorer.GreetMessages != null)
                 {
@@ -405,12 +406,23 @@ namespace RogueSharpExample.Systems
             }
             else if (player.Status == "Starving")
             {
-                player.Health -= 2;
+                player.Health -= 1;
             }
 
             if (player.MPRegen.Name != "None" && player.Status == "Healthy" || player.Status == "Hardened")
             {
                 player.MPRegen.Perform();
+            }
+            if (player.Health <= 0)
+            {
+                if (player.Status == "Starving")
+                {
+                    Game.IsGameOver = true;
+                }
+                else
+                {
+                    player.Health = 1;
+                }
             }
 
             if (Game.IsGameOver == true)
@@ -418,16 +430,11 @@ namespace RogueSharpExample.Systems
                 Game.GameOver();
             }
 
-            if (player.Health <= 0)
-            {
-                player.Health = 1;
-            }
-
             IsPlayerTurn = false;
             player.Tick();
         }
 
-        public bool UseItemInInventory(Inventory inventory, char slot) // hp refactor me
+        public bool UseItemInInventory(Inventory inventory, char slot)
         {
             bool itemWasUsed = inventory.UseItemInSlot(slot);
             if (itemWasUsed)
@@ -436,6 +443,17 @@ namespace RogueSharpExample.Systems
                 Game.TogglePopupScreen();
             }
             return itemWasUsed;
+        }
+
+        public bool SellItemInInventory(Inventory inventory, char slot) // hp dome
+        {
+            bool itemWasSold = inventory.SellItemInSlot(slot);
+            if (itemWasSold)
+            {
+                Game.IsSellScreenShowing = false;
+                Game.TogglePopupScreen();
+            }
+            return itemWasSold;
         }
     }
 }

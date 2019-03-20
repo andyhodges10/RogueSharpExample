@@ -8,7 +8,9 @@ namespace RogueSharpExample.Items
         public RevealMapScroll()
         {
             Name = "Magic Map";
-            RemainingUses = 0;
+            RemainingUses = 1;
+            Value = 35;
+            Symbol = '?';
         }
 
         protected override bool UseItem()

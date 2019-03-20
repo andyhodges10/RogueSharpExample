@@ -17,7 +17,7 @@ namespace RogueSharpExample.Behaviors
             Player player = Game.Player;
             MessageLog messageLog = Game.MessageLog;
 
-            foreach (ICell cell in dungeonMap.GetCellsInCircle(monster.X, monster.Y, 1))
+            foreach (ICell cell in dungeonMap.GetCellsInSquare(monster.X, monster.Y, 1))
             {
                 if (dungeonMap.CheckForPlayer(cell.X, cell.Y) && didReveal == false)
                 {

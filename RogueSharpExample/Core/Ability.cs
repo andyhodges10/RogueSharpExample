@@ -75,7 +75,7 @@ namespace RogueSharpExample.Core
             }
             else
             {
-                console.Set(X, Y, RLColor.Blend(Color, RLColor.Gray, 0.5f), Colors.FloorBackground, Symbol);
+                console.Set(X, Y, RLColor.Blend(Color, RLColor.Gray, 0.5f), Colors.Background, Symbol);
             }
         }
     }

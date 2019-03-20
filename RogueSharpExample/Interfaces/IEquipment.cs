@@ -11,5 +11,8 @@
         int MaxMana { get; set; }
         string Name { get; set; }
         int Speed { get; set; }
+        bool GrantsPoisonImmunity { get; set; }
+        bool IsEnhanced { get; set; } // Currently unused
+        int Value { get; set; }
     }
 }

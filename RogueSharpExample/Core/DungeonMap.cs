@@ -19,7 +19,6 @@ namespace RogueSharpExample.Core
         private readonly List<Item> _items;
         private readonly List<Actor> _shopkeepers;
         private readonly List<Actor> _explorers;
-        // private readonly List<Collectable> _collectables; // hp refactor me
 
         public DungeonMap()
         {
@@ -33,7 +32,6 @@ namespace RogueSharpExample.Core
             _items = new List<Item>();
             _shopkeepers = new List<Actor>(); 
             _explorers = new List<Actor>();
-            //_collectables = new List<Collectable>(); // hp refactor me
         }
 
         public void AddMonster(Monster monster)
@@ -113,11 +111,6 @@ namespace RogueSharpExample.Core
         {
             return _treasurePiles.Where(m => m.X == x && m.Y == y).ToList();
         }
-        /*
-        public List<Collectable> GetCollectableAt(int x, int y) // hp
-        {
-            return _collectables.Where(m => m.X == x && m.Y == y).ToList();
-        }*/
 
         public IEnumerable<Point> GetMonsterLocations()
         {
@@ -137,16 +130,6 @@ namespace RogueSharpExample.Core
         {
             _items.Add(item);
         }
-
-        /*public void AddCollectable(Collectable collectable) // hp refactor me
-        {
-            _collectables.Add(collectable);
-        }
-
-        public void RemoveCollectable(Collectable collectable) // hp refactor me
-        {
-            _collectables.Remove(collectable);
-        }*/
 
         public void AddTreasure(int x, int y, ITreasure treasure)
         {
@@ -341,19 +324,13 @@ namespace RogueSharpExample.Core
                 explorer.Draw(mapConsole, this);
             }
 
-            /*foreach (Collectable collectable in _collectables) // hp refactor me
-            {
-                IDrawable drawableCollectable= collectable as IDrawable;
-                drawableCollectable?.Draw(mapConsole, this);
-            }*/
-
             statConsole.Clear();
             int i = 0;
             foreach (Monster monster in _monsters)
             {
                 monster.Draw(mapConsole, this);
 
-                if (IsInFov(monster.X, monster.Y) && (monster.IsMimicInHiding == false || monster.IsInvisible == false))
+                if (IsInFov(monster.X, monster.Y) && monster.IsMimicInHiding == false)
                 {
                     monster.DrawStats(statConsole, i);
                     i++;
@@ -368,7 +345,11 @@ namespace RogueSharpExample.Core
                 return;
             }
 
-            // Wall values used in Actor.cs
+            double distance = Game.DistanceBetween(Game.Player.X, Game.Player.Y, cell.X, cell.Y);
+            float blendRatio = .5f / Game.Player.Awareness;
+            float blendAmount = (float)(blendRatio * distance);
+
+            // Floor values used in Actor.cs
             if (Game.MapLevel < 3)
             {
                 if (IsInFov(cell.X, cell.Y))
@@ -376,22 +357,22 @@ namespace RogueSharpExample.Core
 
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.LowLevelFloorFov, Colors.FloorBackgroundFov, '.');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.LowLevelFloorFov, Colors.LowLevelFloor, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.LowLevelWallFov, Colors.WallBackgroundFov, '#');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.LowLevelWallFov, Colors.LowLevelWall, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '#');
                     }
                 }
                 else
                 {
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.LowLevelFloor, Colors.FloorBackground, '.');
+                        console.Set(cell.X, cell.Y, Colors.LowLevelFloor, Colors.Background, '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.LowLevelWall, Colors.WallBackground, '#');
+                        console.Set(cell.X, cell.Y, Colors.LowLevelWall, Colors.Background, '#');
                     }
                 }
             }
@@ -402,22 +383,22 @@ namespace RogueSharpExample.Core
 
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.FloorFov, Colors.FloorBackgroundFov, '.');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.FloorFov, Colors.Floor, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.WallFov, Colors.WallBackgroundFov, '#');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.WallFov, Colors.Wall, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '#');
                     }
                 }
                 else
                 {
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.Floor, Colors.FloorBackground, '.');
+                        console.Set(cell.X, cell.Y, Colors.Floor, Colors.Background, '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');
+                        console.Set(cell.X, cell.Y, Colors.Wall, Colors.Background, '#');
                     }
                 }
             }
@@ -428,22 +409,22 @@ namespace RogueSharpExample.Core
 
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.IceFloorFov, Colors.FloorBackgroundFov, '.');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.IceFloorFov, Colors.IceFloor, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.IceWallFov, Colors.WallBackgroundFov, '#');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.IceWallFov, Colors.IceWall, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '#');
                     }
                 }
                 else
                 {
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.IceFloor, Colors.FloorBackground, '.');
+                        console.Set(cell.X, cell.Y, Colors.IceFloor, Colors.Background, '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.IceWall, Colors.WallBackground, '#');
+                        console.Set(cell.X, cell.Y, Colors.IceWall, Colors.Background, '#');
                     }
                 }
             }
@@ -454,11 +435,11 @@ namespace RogueSharpExample.Core
 
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.LowLevelFloor, Colors.FloorBackgroundFov, '.');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.CaveFloorFov, Colors.CaveFloor, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.JungleWallFov, Colors.WallBackgroundFov, '#');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.CaveWallFov, Colors.CaveWall, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '#');
                     }
                 }
 
@@ -466,11 +447,11 @@ namespace RogueSharpExample.Core
                 {
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.LowLevelFloorFov, Colors.FloorBackground, '.');
+                        console.Set(cell.X, cell.Y, Colors.CaveFloorFov, Colors.Background, '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.jungleWall, Colors.WallBackground, '#');
+                        console.Set(cell.X, cell.Y, Colors.CaveWall, Colors.Background, '#');
                     }
                 }
             }
@@ -478,25 +459,24 @@ namespace RogueSharpExample.Core
             {
                 if (IsInFov(cell.X, cell.Y))
                 {
-
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.HellFloorFov, Colors.FloorBackgroundFov, '.');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.HellFloorFov, Colors.HellFloor, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.HellWallFov, Colors.WallBackgroundFov, '#');
+                        console.Set(cell.X, cell.Y, RLColor.Blend(Colors.HellWallFov, Colors.HellWall, .5f - blendAmount), RLColor.Blend(Colors.BackgroundFov1, Colors.BackgroundFov2, .5f - blendAmount), '#');
                     }
                 }
                 else
                 {
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.HellFloor, Colors.FloorBackground, '.');
+                        console.Set(cell.X, cell.Y, Colors.HellFloor, Colors.Background, '.');
                     }
                     else
                     {
-                        console.Set(cell.X, cell.Y, Colors.HellWall, Colors.WallBackground, '#');
+                        console.Set(cell.X, cell.Y, Colors.HellWall, Colors.Background, '#');
                     }
                 }
             }

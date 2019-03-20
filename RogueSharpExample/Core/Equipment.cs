@@ -24,6 +24,7 @@ namespace RogueSharpExample.Core
         public string Name2 { get; set; }
         public int Speed { get; set; }
         public bool GrantsPoisonImmunity { get; set; }
+        public bool IsEnhanced { get; set; } // Currently unused
         public int Value { get; set; }
 
         protected bool Equals(Equipment other)
@@ -87,7 +88,7 @@ namespace RogueSharpExample.Core
                     actor.Head = this as HeadEquipment;
                     actor.Health += newHeadEquipment.MaxHealth;
                     actor.Mana += newHeadEquipment.MaxMana;
-                    Game.MessageLog.Add($"{actor.Name} picked up a {Name} helmet");
+                    Game.MessageLog.Add($"You picked up a {Name} helmet");
                 }
                 else
                 {
@@ -103,10 +104,10 @@ namespace RogueSharpExample.Core
                 if (newBodyEquipment.Value > actor.Body.Value)
                 {
                     actor.Body = this as BodyEquipment;
-                    actor.IsPoisonedImmune = newBodyEquipment.GrantsPoisonImmunity; // hp fixme
+                    actor.IsPoisonedImmune = newBodyEquipment.GrantsPoisonImmunity;
                     actor.Health += newBodyEquipment.MaxHealth;
                     actor.Mana += newBodyEquipment.MaxMana;
-                    Game.MessageLog.Add($"{actor.Name} picked up {Name} body armor");
+                    Game.MessageLog.Add($"You picked up {Name} body armor");
                 }
                 else
                 {
@@ -124,7 +125,7 @@ namespace RogueSharpExample.Core
                     actor.Hand = this as HandEquipment;
                     actor.Health += newHandEquipment.MaxHealth;
                     actor.Mana += newHandEquipment.MaxMana;
-                    Game.MessageLog.Add($"{actor.Name} picked up a {Name}");
+                    Game.MessageLog.Add($"You picked up a {Name}");
                 }
                 else
                 {
@@ -142,7 +143,7 @@ namespace RogueSharpExample.Core
                     actor.Feet = this as FeetEquipment;
                     actor.Health += newFeetEquipment.MaxHealth;
                     actor.Mana += newFeetEquipment.MaxMana;
-                    Game.MessageLog.Add($"{actor.Name} picked up {Name} boots");
+                    Game.MessageLog.Add($"You picked up {Name} boots");
                 }
                 else
                 {
@@ -172,7 +173,7 @@ namespace RogueSharpExample.Core
             }
             else
             {
-                console.Set(X, Y, RLColor.Blend(Color, RLColor.Gray, 0.5f), Colors.FloorBackground, Symbol);
+                console.Set(X, Y, RLColor.Blend(Color, RLColor.Gray, 0.5f), Colors.Background, Symbol);
             }
         }
     }

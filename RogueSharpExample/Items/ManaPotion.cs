@@ -24,12 +24,12 @@ namespace RogueSharpExample.Items
             }
             else
             {
-                int regenAmount = Dice.Roll("3D3") + 3; // improved: Dice.Roll("4D4") + 4
+                int regenAmount = Dice.Roll("3D3") + 3;
                 Game.MessageLog.Add($"You consume a {Name} and regens {regenAmount} mana", Colors.Healing);
-                Meditate regen = new Meditate(regenAmount, 0, 0, "Meditate");
+                RegainMP regainMP = new RegainMP(regenAmount, 0);
                 RemainingUses--;
 
-                return regen.Perform();
+                return regainMP.Perform();
             }
         }
     }

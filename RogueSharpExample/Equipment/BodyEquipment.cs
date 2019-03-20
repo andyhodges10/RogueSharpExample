@@ -37,7 +37,7 @@
                 Defense = 2,
                 MaxHealth = 2,
                 Name = "Chintin",
-                Name2 = "mail",
+                Name2 = "Mail",
                 Value = 9
             };
         }
@@ -50,7 +50,7 @@
                 MaxHealth = 3,
                 MaxMana = 2,
                 Name = "Scaled",
-                Name2 = "mail",
+                Name2 = "Mail",
                 Value = 12
             };
         }
@@ -63,7 +63,7 @@
                 MaxHealth = 4,
                 MaxMana = 3,
                 Name = "Plate",
-                Name2 = "mail",
+                Name2 = "Mail",
                 Value = 15
             };
         }
@@ -76,7 +76,7 @@
                 MaxHealth = 5,
                 MaxMana = 5,
                 Name = "Mithril",
-                Name2 = "mail",
+                Name2 = "Mail",
                 Value = 25
             };
         }

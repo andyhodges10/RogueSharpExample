@@ -422,25 +422,29 @@ namespace RogueSharpExample.Core
             {
                 mapConsole.Set(X, Y, Color, Colors.FloorBackgroundFov, Symbol);
             }
-            else if (Game.MapLevel < 3)
+            else if (Game.MapLevel == 1)
             {
-                mapConsole.Set(X, Y, Colors.LowLevelFloor, Colors.FloorBackground, '.');
+                mapConsole.Set(X, Y, Colors.LowLevelFloor, Colors.Background, ',');
+            }
+            else if (Game.MapLevel == 2)
+            {
+                mapConsole.Set(X, Y, Colors.LowLevelFloor, Colors.Background, '.');
             }
             else if (Game.MapLevel < 5)
             {
-                mapConsole.Set(X, Y, Colors.Floor, Colors.FloorBackground, '.');
+                mapConsole.Set(X, Y, Colors.Floor, Colors.Background, '.');
             }
             else if (Game.MapLevel < 7)
             {
-                mapConsole.Set(X, Y, Colors.IceFloor, Colors.FloorBackground, '.');
+                mapConsole.Set(X, Y, Colors.IceFloor, Colors.Background, '.');
             }
             else if (Game.MapLevel < 9)
             {
-                mapConsole.Set(X, Y, Colors.LowLevelFloorFov, Colors.FloorBackground, '.');
+                mapConsole.Set(X, Y, Colors.CaveFloor, Colors.Background, '.');
             }
             else
             {
-                mapConsole.Set(X, Y, Colors.HellFloor, Colors.FloorBackground, '.');
+                mapConsole.Set(X, Y, Colors.HellFloor, Colors.Background, '.');
             }
         }
 

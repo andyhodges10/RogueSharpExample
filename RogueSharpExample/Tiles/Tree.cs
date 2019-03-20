@@ -21,16 +21,18 @@ namespace RogueSharpExample.Core
                 return;
             }
 
+            double distance = Game.DistanceBetween(Game.Player.X, Game.Player.Y, X, Y);
+            float blendRatio = .5f / Game.Player.Awareness;
+            float blendAmount = (float)(blendRatio * distance);
+
             if (map.IsInFov(X, Y))
             {
-                Color = Colors.TreeFov;
+                console.Set(X, Y, RLColor.Blend(Colors.LowLevelFloorFov, Colors.LowLevelFloor, .5f - blendAmount), null, Symbol);
             }
             else
             {
-                Color = Colors.Tree;
+                console.Set(X, Y, Colors.LowLevelFloor, null, Symbol);
             }
-
-            console.Set(X, Y, Color, null, Symbol);
         }
     }
 }

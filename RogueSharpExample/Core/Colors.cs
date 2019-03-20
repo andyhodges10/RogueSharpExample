@@ -4,36 +4,36 @@ namespace RogueSharpExample.Core
 {
     class Colors
     {
-        public static RLColor FloorBackground = RLColor.Black;
-        public static RLColor LowLevelFloor = Swatch.DbVegetation; // (52, 101, 36)
-        public static RLColor Floor = Swatch.AlternateDarkest; // (71, 62, 45)
-        public static RLColor IceFloor = new RLColor(49, 69, 84);
-        public static RLColor HellFloor = new RLColor(83, 36, 29);
-        public static RLColor FloorBackgroundFov = Swatch.DbDark;
-        public static RLColor LowLevelFloorFov = Swatch.DbGrass; // (109, 170, 44)
-        public static RLColor FloorFov = Swatch.Alternate; // (129, 121, 107)
-        public static RLColor IceFloorFov = new RLColor(66, 92, 129);
-        public static RLColor HellFloorFov = new RLColor(111, 47, 40);
+        public static RLColor Background = RLColor.Black;
+        public static RLColor BackgroundFov1 = new RLColor(36, 40, 45);//Swatch.SecondaryDarker; // (51, 56, 64)
+        public static RLColor BackgroundFov2 = new RLColor(9, 11, 14);//Swatch.SecondaryDarkest; // (31, 38, 47)
+        public static RLColor LowLevelFloor = new RLColor(17, 30, 11); //Swatch.DbVegetation; // (52, 101, 36)
+        public static RLColor Floor = new RLColor(22, 19, 14); // Swatch.AlternateDarkest; // (71, 62, 45)
+        public static RLColor IceFloor = new RLColor(15, 21, 26); // (49, 69, 84)
+        public static RLColor CaveFloor = new RLColor(16, 15, 14);
+        public static RLColor HellFloor = new RLColor(29, 11, 10);
+        public static RLColor FloorBackgroundFov = Swatch.DbDark; // (20, 12, 28)
+        public static RLColor LowLevelFloorFov = new RLColor(142, 221, 57); //Swatch.DbGrass; // (109, 170, 44)
+        public static RLColor FloorFov = new RLColor(167, 157, 139); //Swatch.Alternate; // (129, 121, 107)
+        public static RLColor IceFloorFov = new RLColor(85, 119, 168); // (66, 92, 129)
+        public static RLColor CaveFloorFov = new RLColor(85, 80, 75);
+        public static RLColor HellFloorFov = new RLColor(128, 55, 52);
 
-        public static RLColor WallBackground = Swatch.SecondaryDarkest;
-        public static RLColor LowLevelWall = new RLColor(80, 85, 92);
-        public static RLColor Wall = Swatch.Secondary; // (72, 77, 85)
-        public static RLColor IceWall = new RLColor(45, 65, 80);
-        public static RLColor jungleWall = new RLColor(45, 85, 50);
-        public static RLColor HellWall = new RLColor(70, 45, 50);
+        public static RLColor LowLevelWall = new RLColor(24, 26, 28); // (80, 85, 92);
+        public static RLColor Wall = new RLColor(23, 26, 29); //Swatch.Secondary; // (72, 77, 85)
+        public static RLColor IceWall = new RLColor(13, 20, 25);
+        public static RLColor CaveWall = new RLColor(17, 15, 14);
+        public static RLColor HellWall = new RLColor(30, 11, 10);
         public static RLColor WallBackgroundFov = Swatch.SecondaryDarker;
         public static RLColor LowLevelWallFov = Swatch.DbStone; //(117, 113, 97)
-        public static RLColor WallFov = Swatch.SecondaryLighter; // (93, 97, 105)
-        public static RLColor IceWallFov = new RLColor(68, 80, 95);
-        public static RLColor JungleWallFov = new RLColor(67, 98, 70);
-        public static RLColor HellWallFov = new RLColor(90, 70, 74);
+        public static RLColor WallFov = new RLColor(121, 127, 137); //Swatch.SecondaryLighter; // (93, 97, 105)
+        public static RLColor IceWallFov = new RLColor(88, 104, 124); // (68, 80, 95)
+        public static RLColor CaveWallFov = new RLColor(82, 76, 66); // (97, 67, 40)
+        public static RLColor HellWallFov = new RLColor(130, 64, 60);
 
-        public static RLColor DoorBackground = Swatch.ComplimentDarkest;
-        public static RLColor Door = Swatch.ComplimentLighter;
-        public static RLColor DoorBackgroundFov = Swatch.ComplimentDarker;
+        public static RLColor Door = new RLColor(165, 76, 4); // Swatch.ComplimentLighter;
+        public static RLColor DoorBackgroundFov = new RLColor(41, 19, 1); // Swatch.ComplimentDarker;
         public static RLColor DoorFov = Swatch.ComplimentLightest;
-        public static RLColor Tree = Swatch.DbOldStone;
-        public static RLColor TreeFov = Swatch.DbGrass;
         public static RLColor Stairs = Swatch.Secondary;
         public static RLColor StairsFOV = Swatch.DbStone; // old: Swatch.SecondaryLighter
 

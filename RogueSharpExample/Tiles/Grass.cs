@@ -13,11 +13,6 @@ namespace RogueSharpExample.Core
             Y = y;
         }
 
-        /// <summary>
-        /// Will draw grass.
-        /// </summary>
-        /// <param name="console"></param>
-        /// <param name="map"></param>
         public override void Draw(RLConsole console, IMap map)
         {
             if (!map.GetCell(X, Y).IsExplored)
@@ -25,16 +20,18 @@ namespace RogueSharpExample.Core
                 return;
             }
 
+            double distance = Game.DistanceBetween(Game.Player.X, Game.Player.Y, X, Y);
+            float blendRatio = .5f / Game.Player.Awareness;
+            float blendAmount = (float)(blendRatio * distance);
+
             if (map.IsInFov(X, Y))
             {
-                Color = Swatch.DbGrass;
+                console.Set(X, Y, RLColor.Blend(Colors.LowLevelFloorFov, Colors.LowLevelFloor, .5f - blendAmount), null, Symbol);
             }
             else
             {
-                Color = Swatch.DbOldStone;
+                console.Set(X, Y, Colors.LowLevelFloor, null, Symbol);
             }
-
-            console.Set(X, Y, Color, null, Symbol);
         }
     }
 }

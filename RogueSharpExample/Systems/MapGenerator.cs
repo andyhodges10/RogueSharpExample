@@ -269,7 +269,7 @@ namespace RogueSharpExample.Systems
                 int X = Dice.Roll(mapDiceWidthExpression);
                 int Y = Dice.Roll(mapDiceHeightExpression);
 
-                // not working as fully intended
+                // not working as intended -sometimes gets stuck in a tree
                 while (!_map.GetCell(X, Y).IsWalkable)
                 {
                     X = Dice.Roll(mapDiceWidthExpression);
@@ -332,7 +332,7 @@ namespace RogueSharpExample.Systems
         {
             foreach (var room in _map.Rooms)
             {
-                var numberOfItems = Dice.Roll("1D2") + 1;
+                var numberOfItems = Dice.Roll("1D2") + 3;
                 for (int i = 0; i < numberOfItems; i++)
                 {
                     if (_map.DoesRoomHaveWalkableSpace(room))
@@ -413,7 +413,7 @@ namespace RogueSharpExample.Systems
         {
             foreach (var room in _map.Rooms)
             {
-                if (Dice.Roll("1D10") > 7)
+                if (Dice.Roll("1D10") > 6)
                 {
                     if (_map.DoesRoomHaveWalkableSpace(room))
                     {

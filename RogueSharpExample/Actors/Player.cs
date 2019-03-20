@@ -25,13 +25,13 @@ namespace RogueSharpExample.Core
 
         public Player()
         {
-            AttackMessages = new string[] { "You take a thrash at the", "You fiercly lunge at the", "You tighten your grip and deliever an overhead swing at the"};
-            GreetMessages = new string[] { "You begin your quest to defeat the DragonLord, Good luck", "You embark on your journey to slay the Dragonlord", "Good luck on your journey" };
-            DeathMessages = new string[] { "You are dead, not a big surprise", "You fall over dead", "Crumble down to the floor and curse your failures", "You die, you have failed on your quest" };
+            AttackMessages = new string[] { "You thrash at the", "You fiercly lunge at the", "You tighten your grip and swing at the"};
+            GreetMessages = new string[] { "You begin your quest to defeat the DragonLord", "You embark on your journey to slay the Dragonlord", "Good luck on your journey" };
+            DeathMessages = new string[] { "You are dead, not a big surprise", "You fall over dead", "You crumble down to the floor and breathe your last", "You died" };
 
             Attack = 2;
             AttackChance = 40;
-            Awareness = 15;
+            Awareness = 13;
             Color = Colors.Player;
             Defense = 1;
             DefenseChance = 15;
@@ -43,7 +43,7 @@ namespace RogueSharpExample.Core
             Name = "Novice";
             Speed = 10;
             Level = 1;
-            MaxLevel = 15;
+            MaxLevel = 16;
             Experience = 8;
             TotalExperience = 0;
             Hunger = 1000;
@@ -51,6 +51,7 @@ namespace RogueSharpExample.Core
             Symbol = '@';
             Status = "Healthy";
             Inventory = new Inventory(this);
+            Inventory.AddInventoryItem(new FoodRation(2));
 
             QAbility = new DoNothing();
             WAbility = new DoNothing();
@@ -58,8 +59,8 @@ namespace RogueSharpExample.Core
             RAbility = new DoNothing();
             XAbility = new Look();
 
-            HPRegen = new Heal(1, 10, 0, "Heal");
-            MPRegen = new Meditate(1, 20, 0, "Mediate");
+            HPRegen = new RegainHP(1, 10);
+            MPRegen = new RegainMP(1, 20);
             State =   new DoNothing();
 
             Item1 = new HealingPotion();
@@ -125,27 +126,33 @@ namespace RogueSharpExample.Core
             int healthWidth = Convert.ToInt32(((double)Health / (double)MaxHealth) * 16.0);
 
             int remainingHealthWidth = 16 - healthWidth;
-            if (Status == "Poisoned") {
+            if (Status == "Poisoned")
+            {
                 statConsole.SetBackColor(1, 3, healthWidth, 1, RLColor.LightGreen);
             }
-            else {
+            else
+            {
                 statConsole.SetBackColor(1, 3, healthWidth, 1, RLColor.LightRed);
             }
-            if (Status == "Poisoned") {
+            if (Status == "Poisoned")
+            {
                 statConsole.SetBackColor(1 + healthWidth, 3, remainingHealthWidth, 1, Colors.PoisonBacking);
             }
-            else {
+            else
+            {
                 statConsole.SetBackColor(1 + healthWidth, 3, remainingHealthWidth, 1, Colors.HPBacking);
             }
-            if (Status == "Poisoned") {
+            if (Status == "Poisoned")
+            {
                 statConsole.Print(1, 3, $"HP:      {Health}/{MaxHealth}", RLColor.Green);
             }
-            else {
+            else
+            {
                 statConsole.Print(1, 3, $"HP:      {Health}/{MaxHealth}", RLColor.Red);
             }
             int manaWidth = Convert.ToInt32(((double)Mana / (double)MaxMana) * 16.0);
             int remainingManaWidth = 16 - manaWidth;
-            statConsole.SetBackColor(1, 5, manaWidth, 1, RLColor.LightBlue); // Previously: Swatch.Primary
+            statConsole.SetBackColor(1, 5, manaWidth, 1, RLColor.LightBlue);
             statConsole.SetBackColor(1 + manaWidth, 5, remainingManaWidth, 1, Colors.MPBacking);
             statConsole.Print(1, 5,  $"MP:      {Mana}/{MaxMana}", RLColor.Blue);
 
@@ -242,7 +249,7 @@ namespace RogueSharpExample.Core
             StatGain();
         }
 
-        public void ExperienceTable() // hp
+        public void ExperienceTable()
         {
             Player player = Game.Player;
             if (player.Level == 2) {
@@ -284,8 +291,11 @@ namespace RogueSharpExample.Core
             else if (player.Level == 14) {
                 player.Experience = 580;
             }
-            else {
+            else if (player.Level == 15) {
                 player.Experience = 700;
+            }
+            else {
+                player.Experience = 850;
             }
         }
 
@@ -310,15 +320,13 @@ namespace RogueSharpExample.Core
             {
                 player.Name = "Wanderer";
                 player.BonusAttack += 1;
-                player.QAbility = new Whirlwind(1, 2, 1, 0, 0, 0, "Whirlwind"); // Old: RevealMap(12)
                 Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
-                Game.MessageLog.Add("You also learned Whirlwind", Colors.Gold);
             }
             else if (player.Level == 3)
             {
                 player.BonusMaxHealth += 2;
                 player.Health += 2;
-                player.HPRegen = new Heal(1, 8, 0, "Heal");
+                player.HPRegen = new RegainHP(1, 7);
                 player.BonusAttackChance += 5;
                 Game.MessageLog.Add("Your health regen is now faster", Colors.Gold);
             }
@@ -326,17 +334,17 @@ namespace RogueSharpExample.Core
             {
                 player.Name = "Explorer";
                 player.BonusDefense += 1;
-                player.WAbility = new MagicMissile(4, 70, 4, 3, "Magic Missile");
-                
+                player.WAbility = new MagicMissile(4, 70, 4, 3, 0, 0, 0, false, "Magic Missile");
+
                 Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
                 Game.MessageLog.Add("You also learned Magic Missile", Colors.Gold);
             }
             else if (player.Level == 5)
             {
+                player.BonusAwareness += 1;
                 player.BonusMaxMana += 3;
                 player.Mana += 3;
-                player.QAbility = new Whirlwind(2, 3, 4, 0, 0, 0, "Whirlwind 2");
-                Game.MessageLog.Add($"You also improved your Whirlwind", Colors.Gold);
+                Game.MessageLog.Add("You feel more aware of your surroundings", Colors.Gold);
             }
             else if (player.Level == 6)
             {
@@ -344,7 +352,7 @@ namespace RogueSharpExample.Core
                 player.BonusAttack += 1;
                 player.BonusMaxHealth += 2;
                 player.Health += 2;
-                player.EAbility = new LightningBolt(8, 60, 10, 5, "Lightning Bolt");
+                player.EAbility = new LightningBolt(8, 60, 10, 5, 0, 0, 0, "Lightning Bolt");
                 Game.MessageLog.Add($"Congratulations, you are now a {player.Name} ", Colors.Gold);
                 Game.MessageLog.Add($"You also learned Lightning Bolt", Colors.Gold);
             }
@@ -352,8 +360,8 @@ namespace RogueSharpExample.Core
             {
                 player.BonusMaxMana += 3;
                 player.Mana += 3;
-                MPRegen = new Meditate(1, 12, 0, "Mediate"); 
-                player.WAbility = new MagicMissile(6, 75, 2, 5, "Magic Missile 2");
+                MPRegen = new RegainMP(1, 12);
+                player.WAbility = new MagicMissile(6, 75, 2, 5, 0, 0, 0, false, "Magic Missile 2");
                 Game.MessageLog.Add($"You also improved your Magic Missile", Colors.Gold);
                 Game.MessageLog.Add("Your mana regen is now faster", Colors.Gold);
             }
@@ -364,7 +372,7 @@ namespace RogueSharpExample.Core
                 player.BonusDefenseChance += 5;
                 player.BonusMaxHealth += 2;
                 player.Health += 2;
-                player.RAbility = new Fireball(10, 70, 2, 15, 8, "Fireball");
+                player.RAbility = new Fireball(10, 75, 2, 15, 8, 0, 0, 0, "Fireball");
                 Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
                 Game.MessageLog.Add($"You also learned Fireball", Colors.Gold);
             }
@@ -374,10 +382,10 @@ namespace RogueSharpExample.Core
                 player.BonusAttackChance += 5;
                 player.BonusMaxMana += 3;
                 player.Mana += 3;
-                player.HPRegen = new Heal(1, 6, 0, "Heal");
-                player.EAbility = new LightningBolt(10, 65, 8, 6, "Lightning Bolt 2");
-                Game.MessageLog.Add($"You also improved your Lightning Bolt", Colors.Gold);
+                player.HPRegen = new RegainHP(1, 5);
+                player.EAbility = new LightningBolt(10, 65, 8, 6, 0, 0, 0, "Lightning Bolt 2");
                 Game.MessageLog.Add("Your health regen is now faster", Colors.Gold);
+                Game.MessageLog.Add($"You also improved your Lightning Bolt", Colors.Gold);
             }
             else if (player.Level == 10)
             {
@@ -385,55 +393,64 @@ namespace RogueSharpExample.Core
                 player.BonusDefense += 1;
                 player.BonusMaxHealth += 2;
                 player.Health += 2;
-                player.QAbility = new Whirlwind(2, 2, 5, 40, 5, 2, "Whirlwind 3");
                 Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
-                Game.MessageLog.Add($"You also improved your Whirlwind", Colors.Gold);
             }
             else if (player.Level == 11)
             {
                 player.BonusMaxMana += 3;
                 player.Mana += 3;
-                player.RAbility = new Fireball(12, 75, 2, 12, 10, "Fireball 2");
+                player.RAbility = new Fireball(12, 75, 2, 12, 10, 0, 0, 0, "Fireball 2");
                 Game.MessageLog.Add($"You also improved your Fireball", Colors.Gold);
             }
             else if (player.Level == 12)
             {
+                player.Name = "Legend";
                 player.BonusAttack += 1;
-                player.Name = "Savior";
                 player.BonusMaxHealth += 2;
                 player.Health += 2;
                 player.BonusMaxMana += 2;
                 player.Mana += 2;
-                player.WAbility = new MagicMissile(8, 80, 1, 6, "Magic Missile 3");
+                player.WAbility = new MagicMissile(8, 80, 1, 6, 0, 0, 0, false, "Magic Missile 3");
                 Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
                 Game.MessageLog.Add($"You also improved your Magic Missile", Colors.Gold);
             }
             else if (player.Level == 13)
             {
-                player.BonusMaxHealth += 2;
-                player.Health += 2;
+                player.BonusMaxHealth += 1;
+                player.Health += 1;
                 player.BonusMaxMana += 3;
                 player.Mana += 3;
-                MPRegen = new Meditate(1, 8, 0, "Mediate");
-                player.EAbility = new LightningBolt(12, 70, 6, 7, "Lightning Bolt 3");
+                MPRegen = new RegainMP(1, 8);
+                player.EAbility = new LightningBolt(12, 70, 6, 7, 0, 0, 0, "Lightning Bolt 3");
+                Game.MessageLog.Add("Your mana regen is now faster", Colors.Gold);
                 Game.MessageLog.Add($"You also improved your Lightning Bolt", Colors.Gold);
             }
             else if (player.Level == 14)
             {
-                player.Name = "Demigod";
+                player.Name = "Savior";
                 player.BonusDefense += 1;
                 player.BonusMaxHealth += 2;
                 player.Health += 2;
                 player.BonusMaxMana += 3;
                 player.Mana += 3;
-                player.RAbility = new Fireball(14, 80, 2, 10, 12, "Fireball 3");
+                player.RAbility = new Fireball(14, 80, 3, 10, 12, 0, 0, 0, "Fireball 3");
+                Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
                 Game.MessageLog.Add($"You also improved your Fireball", Colors.Gold);
-                Game.MessageLog.Add("Your mana regen is now faster", Colors.Gold);
             }
             else if (player.Level == 15)
             {
-                player.BonusMaxMana +=1;
+                player.BonusAwareness += 1;
+                player.BonusMaxMana += 1;
                 player.Mana += 1;
+                Game.MessageLog.Add("You feel more aware of your surroundings", Colors.Gold);
+            }
+            else if (player.Level == 16)
+            {
+                player.Name = "Demigod";
+                player.BonusAttack += 1;
+                player.BonusMaxMana += 2;
+                player.Mana += 2;
+                Game.MessageLog.Add($"Congratulations, you are now a {player.Name}", Colors.Gold);
             }
         }
 

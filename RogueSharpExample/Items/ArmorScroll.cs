@@ -7,8 +7,10 @@ namespace RogueSharpExample.Items
     {
         public ArmorScroll()
         {
-            Name = "Armor Scroll";
+            Name = "Enhance Armor Scroll";
             RemainingUses = 1;
+            Value = 250;
+            Symbol = '?';
         }
 
         protected override bool UseItem()
@@ -17,15 +19,15 @@ namespace RogueSharpExample.Items
 
             if (player.Body == BodyEquipment.None())
             {
-                Game.MessageLog.Add($"{player.Name} is not wearing any body armor to enhance");
+                Game.MessageLog.Add($"You are not wearing any body armor to enhance");
             }
-            else if (player.Defense >= 8)
+            else if (player.Body.Defense >= 4)
             {
-                Game.MessageLog.Add($"{player.Name} cannot enhance their {player.Body.Name} any more");
+                Game.MessageLog.Add($"You cannot enhance your {player.Body.Name} any more");
             }
             else
             {
-                Game.MessageLog.Add($"{player.Name} uses a {Name} to enhance their {player.Body.Name}");
+                Game.MessageLog.Add($"You use a {Name} to enhance their {player.Body.Name}");
                 player.Body.Defense += 1;
                 RemainingUses--;
             }

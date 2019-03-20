@@ -5,7 +5,7 @@ using RogueSharpExample.Core;
 
 namespace RogueSharpExample.Screens
 {
-    public class DialogScreen : Screen // hp implement me
+    public class DialogScreen : Screen
     {
         public string Dialog;
 

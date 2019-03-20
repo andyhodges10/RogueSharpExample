@@ -7,11 +7,30 @@ namespace RogueSharpExample.Items
 {
     public class FoodRation : Item
     {
-        public FoodRation()
+        private readonly int _amountToRegain;
+
+        public FoodRation(int rarity)
         {
-            Name = "Food Ration";
+            if (rarity == 1)
+            {
+                Name = "Low Quality Food Ration";
+                Value = 10;
+                _amountToRegain = 250;
+            }
+            else if (rarity == 2)
+            {
+                Name = "Food Ration";
+                Value = 15;
+                _amountToRegain = 300;
+            }
+            else
+            {
+                Name = "High Quality Food Ration";
+                Value = 30;
+                _amountToRegain = 400;
+            }
             Color = Swatch.DbBrightWood;
-            RemainingUses = 2;
+            RemainingUses = 1;
             Symbol = '%';
         }
 
@@ -19,7 +38,7 @@ namespace RogueSharpExample.Items
         {
             Player player = Game.Player;
             
-            if (player.Hunger + 200 > player.MaxHunger)
+            if (player.Hunger + _amountToRegain > player.MaxHunger)
             {
                 Game.MessageLog.Add("You ultimately decide to not eat the food ration as you are not hungry enough just yet");
 
@@ -27,11 +46,12 @@ namespace RogueSharpExample.Items
             }
             else
             {
-                Game.MessageLog.Add($"You consume a {Name}", Colors.Healing);
+                Game.MessageLog.Add($"You consume a {Name}, your hunger level is now {player.Hunger + _amountToRegain}", Colors.Healing); // debug
+                //Game.MessageLog.Add($"You consume a {Name}", Colors.Healing);
                 RemainingUses--;
-                Sustain sustain = new Sustain(200, 0, 0, "Sustain");
+                RegainHunger regainHunger = new RegainHunger(_amountToRegain, 0);
 
-                return sustain.Perform();
+                return regainHunger.Perform();
             }
         }
     }

@@ -193,7 +193,7 @@ namespace RogueSharpExample.Systems
                 Player player = Game.Player;
                 if (_selectionType == SelectionType.Area)
                 {
-                    foreach (ICell cell in map.GetCellsInSquare(_cursorPosition.X, _cursorPosition.Y, _area))
+                    foreach (ICell cell in map.GetCellsInCircle(_cursorPosition.X, _cursorPosition.Y, _area))
                     {
                         mapConsole.SetBackColor(cell.X, cell.Y, Swatch.DbSun);
                     }

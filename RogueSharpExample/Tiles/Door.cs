@@ -10,7 +10,6 @@ namespace RogueSharpExample.Core
         {
             Symbol = '+';
             Color = Colors.Door;
-            BackgroundColor = Colors.DoorBackground;
         }
         public bool IsOpen { get; set; }
 
@@ -28,18 +27,18 @@ namespace RogueSharpExample.Core
             }
             Symbol = IsOpen ? '-' : '+';
 
+            double distance = Game.DistanceBetween(Game.Player.X, Game.Player.Y, X, Y);
+            float blendRatio = .5f / Game.Player.Awareness;
+            float blendAmount = (float)(blendRatio * distance);
+
             if (map.IsInFov(X, Y))
             {
-                Color = Colors.DoorFov;
-                BackgroundColor = Colors.DoorBackgroundFov;
-            } 
+                console.Set(X, Y, RLColor.Blend(Colors.DoorFov, Colors.Door, .5f - blendAmount), null, Symbol);
+            }
             else
             {
-                Color = Colors.Door;
-                BackgroundColor = Colors.DoorBackground;
+                console.Set(X, Y, Colors.Door, null, Symbol);
             }
-
-            console.Set(X, Y, Color, BackgroundColor, Symbol);
         }
     }
 }

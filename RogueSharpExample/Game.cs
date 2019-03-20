@@ -14,8 +14,10 @@ namespace RogueSharpExample
     {
         public static bool IsGameOver { get; set; }
         public static bool IsInventoryScreenShowing { get; set; }
-        public static bool IsShopScreenShowing { get; set; }
         public static bool IsDialogScreenShowing { get; set; }
+        public static bool IsShopSelectionScreenShowing { get; set; }
+        public static bool IsBuyScreenShowing { get; set; }
+        public static bool IsSellScreenShowing { get; set; }
 
         private static readonly int _screenWidth = 100;
         private static readonly int _screenHeight = 70;
@@ -27,10 +29,10 @@ namespace RogueSharpExample
         private static readonly int _statHeight = 70;
         private static readonly int _inventoryWidth = 80;
         private static readonly int _inventoryHeight = 11;
-        private static readonly int _popupWidth = 50;
+        private static readonly int _popupWidth = 58; // currently shared with all popup screens
         private static readonly int _popupHeight = 40;
-        private static readonly int _dialogWidth = 58;
         private static readonly int _dialogHeight = 8;
+        private static readonly int _shopSelectionHeight = 16;
 
         private static RLRootConsole _rootConsole;
         private static RLConsole _mapConsole;
@@ -50,8 +52,10 @@ namespace RogueSharpExample
         public static DungeonMap DungeonMap { get; private set; }
         public static IInputSystem InputSystem { get; private set; }
         private static InventoryScreen InventoryScreen;
-        private static ShopScreen ShopScreen; // implement me
         public static DialogScreen DialogScreen;
+        public static ShopSelectionScreen ShopSelectionScreen;
+        private static BuyScreen BuyScreen; // implement me
+        private static SellScreen SellScreen;
         private static int _steps = 0;
 
         // Menuscreens effect variables
@@ -85,8 +89,10 @@ namespace RogueSharpExample
             TargetingSystem = new TargetingSystem();
             InputSystem = new InputSystemPlaying(); 
             InventoryScreen = new InventoryScreen(_popupWidth, _popupHeight);
-            ShopScreen = new ShopScreen(_popupWidth, _popupHeight);
-            DialogScreen = new DialogScreen(_dialogWidth, _dialogHeight);
+            DialogScreen = new DialogScreen(_popupWidth, _dialogHeight);
+            ShopSelectionScreen = new ShopSelectionScreen(_popupWidth, _shopSelectionHeight);
+            BuyScreen = new BuyScreen(_popupWidth, _popupHeight);
+            SellScreen = new SellScreen(_popupWidth, _popupHeight);
 
             if (Player.GreetMessages != null)
             {
@@ -211,15 +217,25 @@ namespace RogueSharpExample
                 {
                     InventoryScreen.Draw(_rootConsole, Player.Inventory);
                 }
-
-                if (IsShopScreenShowing)
+                if (IsBuyScreenShowing)
                 {
-                    ShopScreen.Draw(_rootConsole, Player.Inventory); // hp refactor me
+                    BuyScreen.Draw(_rootConsole, Player.Inventory);
                 }
-
                 if (IsDialogScreenShowing)
                 {
-                    DialogScreen.Draw(_rootConsole); // hp refactor me
+                    DialogScreen.Draw(_rootConsole);
+                }
+                if (IsShopSelectionScreenShowing)
+                {
+                    ShopSelectionScreen.Draw(_rootConsole);
+                }
+                if (IsBuyScreenShowing)
+                {
+                    BuyScreen.Draw(_rootConsole, Player.Inventory);
+                }
+                if (IsSellScreenShowing)
+                {
+                    SellScreen.Draw(_rootConsole, Player.Inventory);
                 }
 
                 _rootConsole.Draw();
@@ -288,7 +304,7 @@ namespace RogueSharpExample
 
         public static void TogglePopupScreen()
         {
-            if (IsInventoryScreenShowing || IsShopScreenShowing || IsDialogScreenShowing)
+            if (IsInventoryScreenShowing || IsDialogScreenShowing || IsShopSelectionScreenShowing || IsBuyScreenShowing || IsSellScreenShowing)
             {
                 InputSystem = new InputSystemPopupScreen();
                 _rootConsole.Update -= OnRootConsoleUpdate;
@@ -310,6 +326,11 @@ namespace RogueSharpExample
             _rootConsole.Render -= OnRootConsoleRender;
             _rootConsole.Update += GameOverUpdate;
             _rootConsole.Render += GameOverRender;
+        }
+
+        public static double DistanceBetween(int x1, int y1, int x2, int y2)
+        {
+            return Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
         }
 
         private static void OnIntroRender(object sender, UpdateEventArgs e)
@@ -434,8 +455,9 @@ namespace RogueSharpExample
             {
                 if (introKeyPress.Key == RLKey.T)
                 {
-                    Game.MessageLog.Add("You Cheater! You are resurrected", Swatch.DbBlood);
+                    Game.MessageLog.Add("You Cheater! You were resurrected", Swatch.DbBlood);
                     Player.Health = Player.MaxHealth;
+                    Player.Hunger = 1200;
                     IsGameOver = false;
                     _rootConsole.Update -= GameOverUpdate;
                     _rootConsole.Render -= GameOverRender;

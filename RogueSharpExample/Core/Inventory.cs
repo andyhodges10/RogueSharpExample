@@ -36,6 +36,29 @@ namespace RogueSharpExample.Core
                 {
                     Item.RemoveAt(index);
                 }
+
+                return true;
+            }
+            catch (System.ArgumentOutOfRangeException) {
+                return false;
+            }
+        }
+
+        public bool SellItemInSlot(char slot)
+        {
+            int index = slot - 97;
+
+            if (index > Item.Count())
+            {
+                return false;
+            }
+
+            try {
+                Item i = Item.ElementAt(index) as Item;
+                Game.Player.Gold += i.Value;
+                Game.MessageLog.Add($"You sold the {i.Name} for {i.Value} gold pieces");
+                Item.RemoveAt(index);
+
                 return true;
             }
             catch (System.ArgumentOutOfRangeException) {
