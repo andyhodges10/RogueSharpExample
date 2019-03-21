@@ -1,5 +1,4 @@
-﻿using RogueSharp.DiceNotation;
-using RogueSharpExample.Core;
+﻿using RogueSharpExample.Core;
 
 namespace RogueSharpExample.Abilities
 {
@@ -27,7 +26,7 @@ namespace RogueSharpExample.Abilities
             else
             {
                 player.Mana -= _manaCost;
-                player.State = new AbnormalState(TurnsToRefresh, "Hardened", 1, 1, 0);
+                player.State = new AbnormalState(TurnsToRefresh, "Hardened", "", 1, 1, 2, -2, 0);
 
                 return true;
             }

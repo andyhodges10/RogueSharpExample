@@ -12,23 +12,23 @@ namespace RogueSharpExample.Monsters
 
         public static Orc Create(int level)
         {
-            int health = Dice.Roll("5D4");
+            int health = Dice.Roll("5D4") + level / 2;
             return new Orc {
                 AttackMessages = new string[] { "The Orc swings its waraxe at you" },
-                GreetMessages = new string[] { "The Orc sharpens its waraxe out its sharp blade" },
+                GreetMessages = new string[] { "The Orc sharpens its waraxe" },
                 DeathMessages = new string[] { "The Orc cries in agony as you land your killing blow" },
-                Attack = Dice.Roll("3D4") + level / 3,
+                Attack = Dice.Roll("5D3") + level / 2,
                 AttackChance = Dice.Roll("15D4"),
                 Awareness = 13,
                 Color = Colors.OrcColor,
-                Defense = Dice.Roll("1D4") + level / 3,
+                Defense = Dice.Roll("2D2") + level / 3,
                 DefenseChance = Dice.Roll("10D5"),
-                Gold = Dice.Roll("5D4"),
+                Gold = Dice.Roll("7D4") + level / 3,
                 Health = health,
                 MaxHealth = health,
                 Name = "Orc",
                 Speed = 14,
-                Experience = Dice.Roll("2D5") + level / 2,
+                Experience = Dice.Roll("3D3") + level / 2,
                 Symbol = 'o'
             };
         }

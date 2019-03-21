@@ -59,7 +59,7 @@ namespace RogueSharpExample.Behaviors
                     if (monster.WaitMessages != null)
                     {
                         Random random = new Random();
-                        int i = random.Next(0, monster.GreetMessages.Length);
+                        int i = random.Next(0, monster.WaitMessages.Length);
                         Game.MessageLog.Add($"{monster.WaitMessages[i]}");
                     }
                     else
@@ -80,7 +80,7 @@ namespace RogueSharpExample.Behaviors
                         if (monster.WaitMessages != null)
                         {
                             Random random = new Random();
-                            int i = random.Next(0, monster.GreetMessages.Length);
+                            int i = random.Next(0, monster.WaitMessages.Length);
                             Game.MessageLog.Add($"{monster.WaitMessages[i]}");
                         }
                         else

@@ -52,6 +52,7 @@ namespace RogueSharpExample.Core
         private int _maxMana;
         private int _bonusMaxMana;
         private string _name;
+        private string _description;
         private int _speed;
         private int _bonusSpeed;
         private int _adjustedSpeed;
@@ -279,6 +280,15 @@ namespace RogueSharpExample.Core
             }
             set {
                 _name = value;
+            } 
+        }
+
+        public string Description {
+            get {
+                return _description;
+            }
+            set {
+                _description = value;
             } 
         }
  

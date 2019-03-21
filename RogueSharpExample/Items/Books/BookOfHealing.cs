@@ -45,19 +45,19 @@ namespace RogueSharpExample.Items
             LearnHeal LearnHeal;
             if (_rarity == 1)
             {
-                LearnHeal = new LearnHeal(1, 20, 5, "Healing 1");
+                LearnHeal = new LearnHeal(1, 12, 5, "Healing 1");
             }
             else if (_rarity == 2)
             {
-                LearnHeal = new LearnHeal(1, 15, 8, "Healing 2");
+                LearnHeal = new LearnHeal(2, 10, 8, "Healing 2");
             }
             else if (_rarity == 2)
             {
-                LearnHeal = new LearnHeal(1, 12, 10, "Healing 3");
+                LearnHeal = new LearnHeal(3, 8, 10, "Healing 3");
             }
             else
             {
-                LearnHeal = new LearnHeal(1, 10, 12, "Healing 4");
+                LearnHeal = new LearnHeal(4, 6, 12, "Healing 4");
             }
             RemainingUses--;
 

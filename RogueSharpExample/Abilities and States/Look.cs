@@ -2,7 +2,6 @@
 using RogueSharpExample.Core;
 using RogueSharpExample.Interfaces;
 using RogueSharpExample.Equipment;
-using RogueSharpExample.Items;
 using System.Collections.Generic;
 
 namespace RogueSharpExample.Abilities
@@ -28,12 +27,24 @@ namespace RogueSharpExample.Abilities
                 {
                     for (int i = 0; i < checkTreasurePile.Count; i++)
                     {
-                        if (checkTreasurePile[i].Treasure is HeadEquipment ||
+                        if (checkTreasurePile[i].Treasure is Trap)
+                        {
+                            Game.MessageLog.Add($"That is a {checkTreasurePile[i].Treasure.Name}");
+                            foreach (ICell cell in Game.DungeonMap.GetCellsInSquare(target.X, target.Y, 1))
+                            {
+                                if (Game.DungeonMap.CheckForPlayer(cell.X, cell.Y))
+                                {
+                                    Game.DungeonMap.RemoveTrap(target.X, target.Y);
+                                    Game.MessageLog.Add($"You disarm the {checkTreasurePile[i].Treasure.Name}");
+                                }
+                            }
+                        }
+                        else if (checkTreasurePile[i].Treasure is HeadEquipment ||
                            checkTreasurePile[i].Treasure is HandEquipment ||
                            checkTreasurePile[i].Treasure is FeetEquipment ||
                            checkTreasurePile[i].Treasure is BodyEquipment)
                         {
-                            Game.MessageLog.Add($"That is a {checkTreasurePile[i].Treasure.Name} {checkTreasurePile[i].Treasure.Name2}");
+                            Game.MessageLog.Add($"That is a {checkTreasurePile[i].Treasure.Name} {checkTreasurePile[i].Treasure.Description}");
                         }
                         else
                         {
@@ -74,6 +85,11 @@ namespace RogueSharpExample.Abilities
                 if (currentMonster != null)
                 {
                     Game.MessageLog.Add($"That is a {currentMonster.Name}");
+                    //Game.MessageLog.Add($"That is a {currentMonster.Description}"); // implement me
+                }
+                if (checkTreasurePile != null)
+                {
+                    Game.MessageLog.Add("That is an item sitting on a Tree. A programmer blushes in an alternate dimension");
                 }
                 if (checkPlant != null)
                 {

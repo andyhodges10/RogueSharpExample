@@ -53,9 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abilities and States\Learn\LearnSacrifice.cs" />
+    <Compile Include="Abilities and States\Attack Modifiers\Lifesteal.cs" />
+    <Compile Include="Abilities and States\Spells\Reveal.cs" />
     <Compile Include="Abilities and States\States\Hardened.cs" />
     <Compile Include="Abilities and States\Spells\Heal.cs" />
-    <Compile Include="Abilities and States\Spells\InflictPoison.cs" />
+    <Compile Include="Abilities and States\Attack Modifiers\InflictPoison.cs" />
     <Compile Include="Abilities and States\Learn\LearnHeal.cs" />
     <Compile Include="Abilities and States\Learn\LearnReveal.cs" />
     <Compile Include="Abilities and States\Learn\LearnWhirlwind.cs" />
@@ -73,21 +75,35 @@
     <Compile Include="Abilities and States\Item Abilities\RegainHunger.cs" />
     <Compile Include="Abilities and States\Spells\Sustain.cs" />
     <Compile Include="Abilities and States\Spells\Whirlwind.cs" />
+    <Compile Include="Actors\Monsters\Easy Monsters\EasyMimic.cs" />
+    <Compile Include="Actors\Monsters\Hard Monsters\Ogre.cs" />
+    <Compile Include="Actors\Monsters\Hard Monsters\Werewolf.cs" />
     <Compile Include="Behaviors\MimicDisguised.cs" />
     <Compile Include="Behaviors\MonsterHeal.cs" />
     <Compile Include="Behaviors\MonsterPoison.cs" />
     <Compile Include="Behaviors\RunAway.cs" />
     <Compile Include="Behaviors\ShoutForHelp.cs" />
-    <Compile Include="Behaviors\SplitOoze.cs" />
+    <Compile Include="Behaviors\SplitSludge.cs" />
     <Compile Include="Behaviors\SplitSlime.cs" />
     <Compile Include="Behaviors\StandardMoveAndAttack.cs" />
     <Compile Include="Core\Ability.cs" />
     <Compile Include="Actors\Actor.cs" />
     <Compile Include="Core\Colors.cs" />
     <Compile Include="Core\Direction.cs" />
+    <Compile Include="Core\Trap.cs" />
+    <Compile Include="Interfaces\ITrap.cs" />
+    <Compile Include="Items\Magical Equipment\MithrilBody.cs" />
+    <Compile Include="Items\Magical Equipment\MithrilFeet.cs" />
+    <Compile Include="Items\Magical Equipment\MithrilHand.cs" />
+    <Compile Include="Items\Magical Equipment\MithrilHead.cs" />
+    <Compile Include="Items\Sachet.cs" />
     <Compile Include="Items\Books\BookOfSacrifice.cs" />
     <Compile Include="Items\ExplosiveFlask.cs" />
     <Compile Include="Items\FoodRation.cs" />
+    <Compile Include="Items\Magical Equipment\DragonLordFeet.cs" />
+    <Compile Include="Items\Magical Equipment\DragonLordHand.cs" />
+    <Compile Include="Items\Magical Equipment\DragonLordBody.cs" />
+    <Compile Include="Items\Magical Equipment\DragonLordHead.cs" />
     <Compile Include="Items\PoisonFlask.cs" />
     <Compile Include="Items\SerpentWand.cs" />
     <Compile Include="Items\Books\BookOfHealing.cs" />
@@ -97,18 +113,19 @@
     <Compile Include="Items\VampiricWand.cs" />
     <Compile Include="Screens\SellScreen.cs" />
     <Compile Include="Screens\ShopSelectionScreen.cs" />
+    <Compile Include="Systems\TrapGenerator.cs" />
     <Compile Include="Tiles\Door.cs" />
     <Compile Include="Core\DungeonMap.cs" />
     <Compile Include="Core\Equipment.cs" />
-    <Compile Include="Loot\Gold.cs" />
+    <Compile Include="Core\Gold.cs" />
     <Compile Include="Tiles\Grass.cs" />
     <Compile Include="Tiles\Plant.cs" />
     <Compile Include="Core\Inventory.cs" />
-    <Compile Include="Loot\Item.cs" />
+    <Compile Include="Core\Item.cs" />
     <Compile Include="Actors\Monster.cs" />
     <Compile Include="Actors\Player.cs" />
     <Compile Include="Tiles\Stairs.cs" />
-    <Compile Include="Loot\TreasurePile.cs" />
+    <Compile Include="Core\TreasurePile.cs" />
     <Compile Include="Tiles\Tree.cs" />
     <Compile Include="Equipment\BodyEquipment.cs" />
     <Compile Include="Equipment\FeetEquipment.cs" />
@@ -146,7 +163,7 @@
     <Compile Include="Actors\Monsters\Bosses\KoboldChief.cs" />
     <Compile Include="Actors\Monsters\Normal Monsters\Mimic.cs" />
     <Compile Include="Actors\Monsters\Hard Monsters\Orc.cs" />
-    <Compile Include="Actors\Monsters\Normal Monsters\Ooze.cs" />
+    <Compile Include="Actors\Monsters\Normal Monsters\Sludge.cs" />
     <Compile Include="Actors\Monsters\Easy Monsters\Rat.cs" />
     <Compile Include="Actors\Monsters\Hard Monsters\Slime.cs" />
     <Compile Include="Actors\Monsters\Normal Monsters\Viper.cs" />
@@ -169,6 +186,9 @@
     <Compile Include="Systems\Pool.cs" />
     <Compile Include="Systems\SchedulingSystem.cs" />
     <Compile Include="Systems\TargetingSystem.cs" />
+    <Compile Include="Traps\BearTrap.cs" />
+    <Compile Include="Traps\PoisonTrap.cs" />
+    <Compile Include="Traps\ExplosiveTrap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

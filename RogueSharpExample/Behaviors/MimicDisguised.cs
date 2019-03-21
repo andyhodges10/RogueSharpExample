@@ -32,7 +32,7 @@ namespace RogueSharpExample.Behaviors
                         if (player.IsPoisonedImmune == false)
                         {
                             messageLog.Add("You were hit! The poison starts to enter your system", Swatch.DbBlood);
-                            player.State = new AbnormalState(3, "Poisoned", -1, -1, 3);
+                            player.State = new AbnormalState(4, "Poisoned", "The Poison has stated to take its full effect", -2, -2, -3, 2,  3);
                         }
                         else if (player.Status == "Hardened")
                         {

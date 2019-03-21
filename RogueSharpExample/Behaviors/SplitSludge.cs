@@ -6,7 +6,7 @@ using RogueSharpExample.Systems;
 
 namespace RogueSharpExample.Behaviors
 {
-    public class SplitOoze : IBehavior
+    public class SplitSludge : IBehavior
     {
         public bool Act(Monster monster, CommandSystem commandSystem)
         {
@@ -30,14 +30,14 @@ namespace RogueSharpExample.Behaviors
                 return false;
             }
 
-            if (Monster.CloneOoze(monster) is Ooze newOoze)
+            if (Monster.CloneSludge(monster) is Sludge newSludge)
             {
-                newOoze.TurnsAlerted = 1;
-                newOoze.X = cell.X;
-                newOoze.Y = cell.Y;
-                newOoze.MaxHealth = halfHealth;
-                newOoze.Health = halfHealth;
-                map.AddMonster(newOoze);
+                newSludge.TurnsAlerted = 1;
+                newSludge.X = cell.X;
+                newSludge.Y = cell.Y;
+                newSludge.MaxHealth = halfHealth;
+                newSludge.Health = halfHealth;
+                map.AddMonster(newSludge);
                 Game.MessageLog.Add($"{monster.Name} splits itself in two");
             }
             else

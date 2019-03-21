@@ -13,12 +13,12 @@ namespace RogueSharpExample.Items
             _rarity = rarity;
             if (_rarity == 1)
             {
-                Name = "Book Of Whirlwind";
+                Name = "Book Of Weaker Whirlwind";
                 Value = 100;
             }
             else if (_rarity == 2)
             {
-                Name = "Book Of Poison Whirlwind";
+                Name = "Book Of Whirlwind";
                 Value = 150;
             }
             else if (_rarity == 3)
@@ -28,7 +28,7 @@ namespace RogueSharpExample.Items
             }
             else
             {
-                Name = "Book Of Greater Poison Whirlwind";
+                Name = "Book Of Epic Whirlwind";
                 Value = 300;
             }
             Color = RLColor.Yellow;
@@ -53,11 +53,11 @@ namespace RogueSharpExample.Items
             }
             else if (_rarity == 2)
             {
-                learnWhirlwind = new LearnWhirlwind(2, 3, 4, 10, 6, 2, "Whirlwind 3");
+                learnWhirlwind = new LearnWhirlwind(2, 2, 4, 10, 6, 2, "Whirlwind 3");
             }
             else
             {
-                learnWhirlwind = new LearnWhirlwind(2, 2, 5, 40, 6, 2, "P.Whirlwind 2");
+                learnWhirlwind = new LearnWhirlwind(2, 2, 5, 40, 6, 2, "Whirlwind 4");
             }
             RemainingUses--;
 

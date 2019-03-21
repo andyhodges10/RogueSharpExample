@@ -14,23 +14,23 @@ namespace RogueSharpExample.Items
             if (_rarity == 1)
             {
                 Name = "Low Quality Wand of Vampiric Strike";
-                Value = 30;
+                Value = 15;
                 magicMissile = new MagicMissile(6, 90, 0, 0, 90, 5, 3, true, "Vampiric Strike");
             }
             else if (_rarity == 2)
             {
                 Name = "Wand of Vampiric Strike";
-                Value = 50;
-                magicMissile = new MagicMissile(9, 95, 0, 0, 95, 6, 3, true, "Vampiric Strike");
+                Value = 20;
+                magicMissile = new MagicMissile(10, 95, 0, 0, 95, 6, 3, true, "Vampiric Strike");
             }
             else
             {
                 Name = "High Quality Wand of Vampiric Strike";
-                Value = 100;
-                magicMissile = new MagicMissile(14, 100, 0, 0, 0, 0, 0, true, "Vampiric Strike");
+                Value = 30;
+                magicMissile = new MagicMissile(15, 100, 0, 0, 0, 0, 0, true, "Vampiric Strike");
             }
 
-            RemainingUses = 3;
+            RemainingUses = 5;
             Symbol = '/';
         }
 

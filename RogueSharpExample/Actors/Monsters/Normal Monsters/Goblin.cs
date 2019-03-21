@@ -12,22 +12,22 @@ namespace RogueSharpExample.Monsters
 
         public static Goblin Create(int level)
         {
-            int health = Dice.Roll("2D6");
+            int health = Dice.Roll("4D3") + level / 2;
             return new Goblin {
                 AttackMessages = new string[] { "The Goblin swings its axe at you" },
                 GreetMessages = new string[] { "The Goblin shouts at you" },
                 DeathMessages = new string[] { "The Goblin falls down dead" },
-                Attack = Dice.Roll("2D5") + level / 3,
+                Attack = Dice.Roll("4D3") + level / 3,
                 AttackChance = Dice.Roll("12D5"),
                 Awareness = 10,
                 Color = Colors.GoblinColor,
                 Defense = Dice.Roll("1D2") + level / 3,
                 DefenseChance = Dice.Roll("10D4"),
-                Gold = Dice.Roll("4D4"),
+                Gold = Dice.Roll("4D4") + level / 2,
                 Health = health,
                 MaxHealth = health,
                 Name = "Goblin",
-                Speed = 16,
+                Speed = 17 - level / 3,
                 Experience = Dice.Roll("2D3") + level / 2,
                 Symbol = 'g'
             };

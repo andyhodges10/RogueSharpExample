@@ -73,7 +73,7 @@ namespace RogueSharpExample.Abilities
                     {
                         if (player.IsPoisonedImmune == false && _poisonDamage != 0)
                         {
-                            player.State = new AbnormalState(_poisonLength, "Poisoned", -1, -1, _poisonDamage);
+                            player.State = new AbnormalState(_poisonLength, "Poisoned", "", -2, -2, -3, 2, _poisonDamage);
                         }
                     }
                 }

@@ -18,7 +18,20 @@ namespace RogueSharpExample.Systems
 
             if (keyPress != null)
             {
-                if (keyPress.Key == RLKey.Up || keyPress.Key == RLKey.Keypad8)
+                if (keyPress.Key == RLKey.Escape) // hp Fixme. Implement main menu
+                {
+                    rootConsole.Close();
+                }
+                else if (player.Status == "Dead")
+                {
+                    didPlayerAct = true;
+                }
+                else if (player.Status == "Stuck")
+                {
+                    messageLog.Add("You spend a turn trying to get out of your predicament", Swatch.DbBlood);
+                    didPlayerAct = true;
+                }
+                else if (keyPress.Key == RLKey.Up || keyPress.Key == RLKey.Keypad8)
                 {
                     didPlayerAct = commandSystem.MovePlayer(Direction.Up);
                 }
@@ -71,10 +84,6 @@ namespace RogueSharpExample.Systems
                     Game.TogglePopupScreen();
                     didPlayerAct = true;
                 }
-                else if (keyPress.Key == RLKey.Escape) // hp Fixme. Implement main menu
-                {
-                    rootConsole.Close();
-                }
                 else if (keyPress.Key == RLKey.Insert) // hp Debug
                 {
                     Game.MoveDownDungeonLevel();
@@ -86,26 +95,24 @@ namespace RogueSharpExample.Systems
                 {
                     player.LevelUp();
 
-                    messageLog.Add("You Cheater! Instant levelUp", Swatch.DbBlood);
+                    messageLog.Add("You Cheater! Instant level Up", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
                 else if (keyPress.Key == RLKey.PageUp) // Debug
                 {
                     player.Body = BodyEquipment.DragonLord();
-                    player.Feet = FeetEquipment.Mithril();
-                    player.Hand = HandEquipment.Excalibur();
-                    player.Head = HeadEquipment.Mithril();
+                    player.Feet = FeetEquipment.DragonLord();
+                    if (player.Hand == HandEquipment.Vampiric()) {
+                        player.Hand = HandEquipment.DragonLord();
+                    }
+                    else { 
+                        player.Hand = HandEquipment.Vampiric();
+                    }
+                    player.Head = HeadEquipment.DragonLord();
                     player.Health = player.MaxHealth;
                     player.Mana = player.MaxMana;
                     player.IsPoisonedImmune = player.Body.GrantsPoisonImmunity;
-                    WeaponScroll weaponScroll = new WeaponScroll();
-                    ArmorScroll armorScroll = new ArmorScroll();
-                    BookOfWhirlwind bookOfWhirlwind = new BookOfWhirlwind(4);
-                    player.Inventory.AddInventoryItem(weaponScroll);
-                    player.Inventory.AddInventoryItem(armorScroll);
-                    player.Inventory.AddInventoryItem(bookOfWhirlwind);
-
-                    messageLog.Add("You Cheater! Best equipment and inventory items given", Swatch.DbBlood);
+                    messageLog.Add("You Cheater! Best equipment given and health fully restored", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
                 else if (keyPress.Key == RLKey.Delete) // Debug
@@ -114,25 +121,40 @@ namespace RogueSharpExample.Systems
                     player.Hunger = 50;
                     if (player.IsPoisonedImmune == false)
                     {
-                        player.State = new AbnormalState(4, "Poisoned", -1, -1, 3);
+                        player.State = new AbnormalState(6, "Poisoned", "The Poison has stated to take its full effect", -2, -2, -3, 2, 3);
                     }
                     else
                     {
-                        messageLog.Add("Which you are immune to", Swatch.DbBlood);
+                        messageLog.Add("Thankfully you are completely immune to poison", Swatch.DbBlood);
                     }
                     didPlayerAct = true;
                 }
                 else if (keyPress.Key == RLKey.End) // Debug
                 {
-                    FoodRation foodRation = new FoodRation(3);
-                    RevealMapScroll revealMapScroll = new RevealMapScroll();
-                    SerpentWand serpentWand = new SerpentWand(3);
-                    PoisonFlask poisonFlask = new PoisonFlask(3);
-                    player.Inventory.AddInventoryItem(foodRation);
-                    player.Inventory.AddInventoryItem(revealMapScroll);
-                    player.Inventory.AddInventoryItem(serpentWand);
-                    player.Inventory.AddInventoryItem(poisonFlask);
-                    messageLog.Add("You Cheater! Rare Inventory items given", Swatch.DbBlood);
+                    player.Gold += 5000;
+                    WeaponScroll WeaponScroll = new WeaponScroll();
+                    ArmorScroll ArmorScroll = new ArmorScroll();
+                    BookOfWhirlwind BookOfWhirlwind = new BookOfWhirlwind(4);
+                    BookOfHealing BookOfHealing = new BookOfHealing(4);
+                    BookOfSacrifice BookOfSacrifice = new BookOfSacrifice(4);
+                    FoodRation FoodRation = new FoodRation(3);
+                    RevealMapScroll RevealMapScroll = new RevealMapScroll();
+                    SerpentWand SerpentWand = new SerpentWand(3);
+                    PoisonFlask PoisonFlask = new PoisonFlask(3);
+                    ExplosiveFlask ExplosiveFlask = new ExplosiveFlask(3);
+                    VampiricWand VampiricWand = new VampiricWand(3);
+                    player.Inventory.AddInventoryItem(WeaponScroll);
+                    player.Inventory.AddInventoryItem(ArmorScroll);
+                    player.Inventory.AddInventoryItem(BookOfWhirlwind);
+                    player.Inventory.AddInventoryItem(BookOfHealing);
+                    player.Inventory.AddInventoryItem(BookOfSacrifice);
+                    player.Inventory.AddInventoryItem(FoodRation);
+                    player.Inventory.AddInventoryItem(RevealMapScroll);
+                    player.Inventory.AddInventoryItem(SerpentWand);
+                    player.Inventory.AddInventoryItem(PoisonFlask);
+                    player.Inventory.AddInventoryItem(ExplosiveFlask);
+                    player.Inventory.AddInventoryItem(VampiricWand);
+                    messageLog.Add("You Cheater! A bunch of gold and Rare Inventory items given", Swatch.DbBlood);
                     didPlayerAct = true;
                 }
                 else if (keyPress.Key == RLKey.PageDown) // Debug
@@ -202,6 +224,11 @@ namespace RogueSharpExample.Systems
                 if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString()) && Game.IsInventoryScreenShowing == true)
                 {
                     return commandSystem.UseItemInInventory(Game.Player.Inventory, commandChar);
+                }
+
+                if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString()) && Game.IsBuyScreenShowing == true)
+                {
+                    return commandSystem.BuyItemAtShop(Game.Shopkeeper.Inventory, commandChar);
                 }
 
                 if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString()) && Game.IsSellScreenShowing == true)

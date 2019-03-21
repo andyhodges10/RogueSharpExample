@@ -24,12 +24,12 @@ namespace RogueSharpExample.Behaviors
             {
                 messageLog.Add($"The {monster.Name} spat poison at you", Swatch.DbBlood);
 
-                if (Dice.Roll("1D10") < 7)
+                if (Dice.Roll("1D100") <= monster.PoisonChance)
                 {
                     if (player.IsPoisonedImmune == false)
                     {
                         messageLog.Add("You were hit! The poison starts to enter your system", Swatch.DbBlood);
-                        player.State = new AbnormalState(5, "Poisoned", -1, -1, monster.PoisonDamage);
+                        player.State = new AbnormalState(monster.PoisonLength, "Poisoned", "The Poison has stated to take its full effect", -2, -2, -3, 2, monster.PoisonDamage);
                     }
                     else if (player.Status == "Hardened")
                     {

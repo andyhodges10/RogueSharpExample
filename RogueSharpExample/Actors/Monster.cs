@@ -13,6 +13,8 @@ namespace RogueSharpExample.Core
         public IAbility State { get; set; }
         public bool IsInvisible { get; set; } // hp implement me
         public bool IsMimicInHiding { get; set; }
+        public int PoisonLength { get; set; }
+        public int PoisonChance { get; set; }
         
         public void DrawStats(RLConsole statConsole, int position)
         {
@@ -41,9 +43,9 @@ namespace RogueSharpExample.Core
             }
         }
 
-        public static Monster CloneOoze(Monster anotherMonster)
+        public static Monster CloneSludge(Monster anotherMonster)
         {
-            return new Ooze
+            return new Sludge
             {
                 Attack = anotherMonster.Attack,
                 AttackChance = anotherMonster.AttackChance,

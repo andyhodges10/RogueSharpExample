@@ -12,22 +12,22 @@ namespace RogueSharpExample.Monsters
 
         public static Gnoll Create(int level)
         {
-            int health = Dice.Roll("4D4");
+            int health = Dice.Roll("4D4") + level / 2;
             return new Gnoll {
                 AttackMessages = new string[] { "The Gnoll swings its sword at you" },
                 GreetMessages = new string[] { "The Gnoll sharpens it's blade" },
                 DeathMessages = new string[] { "The Gnoll falls down dead" },
-                Attack = Dice.Roll("2D4") + level / 3,
+                Attack = Dice.Roll("3D3") + level / 3,
                 AttackChance = Dice.Roll("13D4"),
                 Awareness = 10,
                 Color = Colors.GnollColor,
                 Defense = Dice.Roll("1D2") + level / 3,
                 DefenseChance = Dice.Roll("10D4"),
-                Gold = Dice.Roll("5D7"),
+                Gold = Dice.Roll("5D7") + level / 2,
                 Health = health,
                 MaxHealth = health,
                 Name = "Gnoll",
-                Speed = 14,
+                Speed = 14 - level / 3,
                 Experience = Dice.Roll("2D4") + level / 2,
                 Symbol = 'g'
             };

@@ -22,17 +22,17 @@ namespace RogueSharpExample.Items
             {
                 Name = "Explosive Flask";
                 Value = 50;
-                fireball = new Fireball(8, 85, 4, 0, 0, 0, 0, 0, "Explosive");
+                fireball = new Fireball(9, 85, 4, 0, 0, 0, 0, 0, "Explosive");
             }
             else
             {
                 Name = "High Quality Explosive Flask";
                 Value = 100;
-                fireball = new Fireball(12, 95, 4, 0, 0, 0, 0, 0, "Explosive");
+                fireball = new Fireball(13, 95, 4, 0, 0, 0, 0, 0, "Explosive");
             }
 
             Color = RLColor.LightGreen;
-            RemainingUses = 1;
+            RemainingUses = 3;
         }
 
         protected override bool UseItem()

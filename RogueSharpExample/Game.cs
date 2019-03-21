@@ -12,12 +12,12 @@ namespace RogueSharpExample
 {
     public class Game
     {
-        public static bool IsGameOver { get; set; }
         public static bool IsInventoryScreenShowing { get; set; }
         public static bool IsDialogScreenShowing { get; set; }
         public static bool IsShopSelectionScreenShowing { get; set; }
         public static bool IsBuyScreenShowing { get; set; }
         public static bool IsSellScreenShowing { get; set; }
+        public static bool IsGameOver { get; set; }
 
         private static readonly int _screenWidth = 100;
         private static readonly int _screenHeight = 70;
@@ -31,8 +31,8 @@ namespace RogueSharpExample
         private static readonly int _inventoryHeight = 11;
         private static readonly int _popupWidth = 58; // currently shared with all popup screens
         private static readonly int _popupHeight = 40;
-        private static readonly int _dialogHeight = 8;
-        private static readonly int _shopSelectionHeight = 16;
+        private static readonly int _dialogHeight = 9;
+        private static readonly int _shopSelectionHeight = 16; // unused
 
         private static RLRootConsole _rootConsole;
         private static RLConsole _mapConsole;
@@ -43,6 +43,7 @@ namespace RogueSharpExample
 
         public static int MapLevel = 1;
         public static Player Player { get; set; }
+        public static Actor Shopkeeper { get; set; }
         public static MessageLog MessageLog { get; private set; }
         public static CommandSystem CommandSystem { get; private set; }
         public static SchedulingSystem SchedulingSystem { get; private set; }
@@ -53,12 +54,12 @@ namespace RogueSharpExample
         public static IInputSystem InputSystem { get; private set; }
         private static InventoryScreen InventoryScreen;
         public static DialogScreen DialogScreen;
-        public static ShopSelectionScreen ShopSelectionScreen;
-        private static BuyScreen BuyScreen; // implement me
+        public static ShopSelectionScreen ShopSelectionScreen; // implement me
+        public static BuyScreen BuyScreen; 
         private static SellScreen SellScreen;
-        private static int _steps = 0;
+        private static int _steps = 0; // debug
 
-        // Menuscreens effect variables
+        // Menuscreen effect
         private static RLColor IntroColor;
         private static int i = 0;
         private static bool goingForward = true;
@@ -66,14 +67,10 @@ namespace RogueSharpExample
         public static void Main()
         {
             string fontFileName = "terminal8x8.png";
-
             int seed = (int)DateTime.UtcNow.Ticks;
             string consoleTitle = $"RoguelikeGame - Level {MapLevel}";
             Random = new DotNetRandom(seed);
-
             MessageLog = new MessageLog();
-            
-            
             SchedulingSystem = new SchedulingSystem();
             MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, MapLevel);
             DungeonMap = mapGenerator.CreateForrest();
@@ -165,7 +162,7 @@ namespace RogueSharpExample
                     {
                         player.Status = "Hungry";
                     }
-                    else if (player.Hunger > 50 && !(player.Status == "Poisoned" || player.Status == "Hardened"))
+                    else if (player.Hunger > 50 && !(player.Status == "Poisoned" || player.Status == "Hardened" || player.Status == "Stuck"))
                     {
                         player.Status = "Healthy";
                     }
@@ -217,10 +214,6 @@ namespace RogueSharpExample
                 {
                     InventoryScreen.Draw(_rootConsole, Player.Inventory);
                 }
-                if (IsBuyScreenShowing)
-                {
-                    BuyScreen.Draw(_rootConsole, Player.Inventory);
-                }
                 if (IsDialogScreenShowing)
                 {
                     DialogScreen.Draw(_rootConsole);
@@ -231,7 +224,7 @@ namespace RogueSharpExample
                 }
                 if (IsBuyScreenShowing)
                 {
-                    BuyScreen.Draw(_rootConsole, Player.Inventory);
+                    BuyScreen.Draw(_rootConsole);
                 }
                 if (IsSellScreenShowing)
                 {
@@ -322,6 +315,24 @@ namespace RogueSharpExample
 
         public static void GameOver()
         {
+            Player.Status = "Dead";
+            if (Player.DeathMessages != null)
+            {
+                Random random = new Random();
+                int i = random.Next(0, Player.DeathMessages.Length);
+                Game.MessageLog.Add($"{Player.DeathMessages[i]}", Swatch.DbBlood);
+                Game.MessageLog.Add("Press any key to continue", Swatch.DbBlood);
+            }
+            else
+            {
+                Game.MessageLog.Add("Game Over", Swatch.DbBlood);
+                Game.MessageLog.Add("Press any key to continue", Swatch.DbBlood);
+            }
+            IsGameOver = true;
+        }
+
+        public static void ShowGameOverScreen()
+        {
             _rootConsole.Update -= OnRootConsoleUpdate;
             _rootConsole.Render -= OnRootConsoleRender;
             _rootConsole.Update += GameOverUpdate;
@@ -386,7 +397,7 @@ namespace RogueSharpExample
                     _rootConsole.Update += OnStoryUpdate;
                     _rootConsole.Render += OnStoryRender;
                 }
-                else if (introKeyPress.Key == RLKey.E)
+                else if (introKeyPress.Key == RLKey.E || introKeyPress.Key == RLKey.X)
                 {
                     _rootConsole.Close();
                 }
@@ -433,13 +444,13 @@ namespace RogueSharpExample
                     IntroColor
                 );
                 _rootConsole.Print(
-                    (int)(_rootConsole.Width * 0.5) - 6,
+                    (int)(_rootConsole.Width * 0.5) - 12,
                     (int)(_rootConsole.Height * 0.5) + 2,
                     "T - Try Again (Cheater)",
                     Swatch.DbBlood // previously: Swatch.DbSun
                 );
                 _rootConsole.Print(
-                    (int)(_rootConsole.Width * 0.5) - 6,
+                    (int)(_rootConsole.Width * 0.5) - 12,
                     (int)(_rootConsole.Height * 0.5) + 4,
                     "E - Exit Game",
                     Swatch.DbBlood // previously: Swatch.DbSun
@@ -464,7 +475,7 @@ namespace RogueSharpExample
                     _rootConsole.Update += OnRootConsoleUpdate;
                     _rootConsole.Render += OnRootConsoleRender;
                 }
-                else if (introKeyPress.Key == RLKey.E)
+                else if (introKeyPress.Key == RLKey.E || introKeyPress.Key == RLKey.X)
                 {
                     _rootConsole.Close();
                 }

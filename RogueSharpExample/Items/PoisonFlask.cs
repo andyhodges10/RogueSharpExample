@@ -32,7 +32,7 @@ namespace RogueSharpExample.Items
             }
 
             Color = RLColor.LightGreen;
-            RemainingUses = 1;
+            RemainingUses = 3;
         }
 
         protected override bool UseItem()

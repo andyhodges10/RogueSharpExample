@@ -6,6 +6,7 @@ using RogueSharp.DiceNotation;
 using RogueSharpExample.Core;
 using RogueSharpExample.Interfaces;
 using RogueSharpExample.Equipment;
+using RogueSharpExample.Items;
 
 namespace RogueSharpExample.Systems
 {
@@ -83,8 +84,54 @@ namespace RogueSharpExample.Systems
             Actor shopkeeper = Game.DungeonMap.GetShopkeeperAt(x, y);
             if (shopkeeper != null) // debug
             {
-                Game.MessageLog.Add("What are you selling? (Debug)");
-                Game.IsSellScreenShowing = true; // debug
+                
+                Game.MessageLog.Add("What are you buying? (Debug)");
+                if (Game.MapLevel == 4)
+                {
+                    if (shopkeeper.Inventory == null)
+                    {
+                        shopkeeper.Inventory = new Inventory(shopkeeper);
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(1));
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(2));
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfHealing(1));
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfWhirlwind(1));
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfSacrifice(1));
+                        shopkeeper.Inventory.AddInventoryItem(new PoisonFlask(1));
+                    }
+                }
+                if (Game.MapLevel == 6)
+                {
+                    if (shopkeeper.Inventory == null)
+                    {
+                        shopkeeper.Inventory = new Inventory(shopkeeper);
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(1));
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(2));
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(3));
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfReveal());
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfHealing(2));
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfWhirlwind(2));
+                        shopkeeper.Inventory.AddInventoryItem(new BookOfSacrifice(2));
+                        shopkeeper.Inventory.AddInventoryItem(new VampiricWand(2));
+                    }
+                }
+                if (Game.MapLevel == 9)
+                {
+                    if (shopkeeper.Inventory == null)
+                    {
+                        shopkeeper.Inventory = new Inventory(shopkeeper);
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(2));
+                        shopkeeper.Inventory.AddInventoryItem(new FoodRation(3));
+                        shopkeeper.Inventory.AddInventoryItem(new SerpentWand(3));
+                        shopkeeper.Inventory.AddInventoryItem(new WeaponScroll());
+                        shopkeeper.Inventory.AddInventoryItem(new ArmorScroll());
+                    }
+                }
+                
+                Game.Shopkeeper = shopkeeper;
+
+                //Game.IsSellScreenShowing = true; // debug
+                Game.BuyScreen.shopItems = shopkeeper.Inventory;
+                Game.IsBuyScreenShowing = true;
                 //Game.IsShopSelectionScreenShowing = true;
                 Game.TogglePopupScreen();
                 return true;
@@ -215,28 +262,29 @@ namespace RogueSharpExample.Systems
         private static int ResolveDefense(Actor defender, int hits, StringBuilder attackMessage, StringBuilder defenseMessage)
         {
             int blocks = 0;
-
-            if (hits > 0)
+            if (defender.Status != "Dead")
             {
-                // attackMessage.AppendFormat("scoring {0} hits.", hits); // debug
-                // defenseMessage.AppendFormat("  {0} defends and rolls: ", defender.Name); // debug
-
-                DiceExpression defenseDice = new DiceExpression().Dice(defender.Defense, 100);
-                DiceResult defenseRoll = defenseDice.Roll();
-
-                foreach (TermResult termResult in defenseRoll.Results)
+                if (hits > 0 && defender.Defense > 0)
                 {
-                    defenseMessage.Append(termResult.Value + ", ");
-                    if (termResult.Value >= 100 - defender.DefenseChance)
+                    // attackMessage.AppendFormat("scoring {0} hits.", hits); // debug
+                    // defenseMessage.AppendFormat("  {0} defends and rolls: ", defender.Name); // debug
+                    DiceExpression defenseDice = new DiceExpression().Dice(defender.Defense, 100);
+                    DiceResult defenseRoll = defenseDice.Roll();
+
+                    foreach (TermResult termResult in defenseRoll.Results)
                     {
-                        blocks++;
+                        defenseMessage.Append(termResult.Value + ", ");
+                        if (termResult.Value >= 100 - defender.DefenseChance)
+                        {
+                            blocks++;
+                        }
                     }
+                    // defenseMessage.AppendFormat("resulting in {0} blocks.", blocks); // debug
                 }
-                // defenseMessage.AppendFormat("resulting in {0} blocks.", blocks); // debug
-            }
-            else
-            {
-                attackMessage.Append("and misses completely.");
+                else
+                {
+                    attackMessage.Append("and misses completely.");
+                }
             }
 
             return blocks;
@@ -244,49 +292,38 @@ namespace RogueSharpExample.Systems
 
         private static void ResolveDamage(Actor defender, int damage)
         {
-            if (damage > 0)
+            if (defender.Status != "Dead")
             {
-                defender.Health = defender.Health - damage;
-
-                if (defender is Player)
+                if (damage > 0)
                 {
-                    Game.MessageLog.Add($"  You were hit for {damage} damage");
+                    defender.Health = defender.Health - damage;
+
+                    if (defender is Player)
+                    {
+                        Game.MessageLog.Add($"  You were hit for {damage} damage");
+                    }
+                    else
+                    {
+                        Game.MessageLog.Add($"  {defender.Name} was hit for {damage} damage");
+                    }
+
+                    if (defender.Health <= 0)
+                    {
+                        ResolveDeath(defender);
+                    }
                 }
                 else
                 {
-                    Game.MessageLog.Add($"  {defender.Name} was hit for {damage} damage");
+                    Game.MessageLog.Add($"  {defender.Name} blocked all damage");
                 }
-
-                if (defender.Health <= 0)
-                {
-                    ResolveDeath(defender);
-                }
-            }
-            else
-            {
-                Game.MessageLog.Add($"  {defender.Name} blocked all damage");
             }
         }
 
         private static void ResolveDeath(Actor defender)
         {
-            if (defender is Player)
+            if (defender is Player && defender.Status != "Dead")
             {
-                if (Game.IsGameOver == false)
-                {
-                    defender.Status = "Dead";
-                    if (defender.DeathMessages != null)
-                    {
-                        Random random = new Random();
-                        int i = random.Next(0, defender.DeathMessages.Length);
-                        Game.MessageLog.Add($"{defender.DeathMessages[i]}", Swatch.DbBlood);
-                    }
-                    else
-                    {
-                        Game.MessageLog.Add("Game Over", Swatch.DbBlood);
-                    }
-                }
-                Game.IsGameOver = true;
+                Game.GameOver();
             }
             else if (defender is Monster)
             {
@@ -413,11 +450,16 @@ namespace RogueSharpExample.Systems
             {
                 player.MPRegen.Perform();
             }
+            if (Game.IsGameOver == true)
+            {
+                Game.ShowGameOverScreen();
+            }
+
             if (player.Health <= 0)
             {
-                if (player.Status == "Starving")
+                if (player.Status == "Starving" || player.Status == "Dead")
                 {
-                    Game.IsGameOver = true;
+                    Game.GameOver();
                 }
                 else
                 {
@@ -425,10 +467,7 @@ namespace RogueSharpExample.Systems
                 }
             }
 
-            if (Game.IsGameOver == true)
-            {
-                Game.GameOver();
-            }
+            
 
             IsPlayerTurn = false;
             player.Tick();
@@ -445,7 +484,18 @@ namespace RogueSharpExample.Systems
             return itemWasUsed;
         }
 
-        public bool SellItemInInventory(Inventory inventory, char slot) // hp dome
+        public bool BuyItemAtShop(Inventory inventory, char slot)
+        {
+            bool itemWasPurchased = inventory.PurchaseItemInSlot(slot);
+            if (itemWasPurchased)
+            {
+                Game.IsBuyScreenShowing = false;
+                Game.TogglePopupScreen();
+            }
+            return itemWasPurchased;
+        }
+
+        public bool SellItemInInventory(Inventory inventory, char slot)
         {
             bool itemWasSold = inventory.SellItemInSlot(slot);
             if (itemWasSold)

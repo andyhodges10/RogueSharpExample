@@ -15,19 +15,19 @@ namespace RogueSharpExample.Items
             {
                 Name = "Low Quality Food Ration";
                 Value = 10;
-                _amountToRegain = 250;
+                _amountToRegain = 300;
             }
             else if (rarity == 2)
             {
                 Name = "Food Ration";
                 Value = 15;
-                _amountToRegain = 300;
+                _amountToRegain = 400;
             }
             else
             {
                 Name = "High Quality Food Ration";
                 Value = 30;
-                _amountToRegain = 400;
+                _amountToRegain = 500;
             }
             Color = Swatch.DbBrightWood;
             RemainingUses = 1;

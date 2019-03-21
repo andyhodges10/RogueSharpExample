@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using RogueSharp;
 using RogueSharp.DiceNotation;
 using RogueSharpExample.Core;
+using RogueSharpExample.Items;
 
 namespace RogueSharpExample.Systems
 {
@@ -43,7 +44,6 @@ namespace RogueSharpExample.Systems
 
             foreach (ICell cell in _map.GetAllCells())
             {
-                
                 if (cell.X != 0 && cell.Y != 0 && cell.X != _width - 1 && cell.Y != _height - 1)
                 {
                     if (Dice.Roll("1d100") > 95)
@@ -61,9 +61,11 @@ namespace RogueSharpExample.Systems
 
             PlacePlayerInForrest();
             CreateForrestStairs();
-            PlaceMonstersInForrest();
-            PlaceItemsInForrest();
-            PlaceEquipmentInForrest();
+            PlaceMonstersInRoom(true, 10);
+            PlaceFoodInRoom(true, 2, 1);
+            PlaceItemsInRoom(true, 6);
+            PlaceEquipmentInRoom(true, 2);
+            PlaceTrapsInRoom(true, 4);
 
             return _map;
         }
@@ -123,24 +125,33 @@ namespace RogueSharpExample.Systems
                 CreateDoors(room);
             }
 
-            if ( _level == 5 || _level == 7 || _level == 9)
+            if (_level == 2 || _level == 3 || _level == 5 || _level == 7 || _level == 9 || _level == 10)
             {
-                PlaceMimics();
+                PlaceFoodInRoom(true, 1, 1);
             }
-
+            if (_level == 2 || _level == 4)
+            {
+                PlaceEquipmentInRoom(true, 1);
+            }
+            if (_level == 3 || _level == 5 || _level == 7)
+            {
+                PlaceMimicsInRoom(false, 1);
+            }
             if (_level == 4 || _level == 6 || _level == 8 || _level == 10)
             {
                 PlaceBoss();
             }
-
-            if (_level == 4 || _level == 6 || _level == 8 || _level == 10)
+            if (_level == 4 || _level == 6 || _level == 8)
             {
-                PlaceShopkeeper();
+                PlaceShopkeeperInRoom(true);
             }
-
             if (_level == 2 || _level == 5 || _level == 7)
             {
-                PlaceExplorer();
+                PlaceExplorerInRoom(true);
+            }
+            if (_level == 9 || _level == 10)
+            {
+                PlaceMonstersInRoom(true, 3);
             }
 
             CreateStairs();
@@ -309,72 +320,146 @@ namespace RogueSharpExample.Systems
             }
         }
 
-        private void PlaceMonstersInForrest()
+        private void PlaceMonstersInRoom(bool isFirst, int numberOfMonsters)
         {
-            foreach (var room in _map.Rooms)
+            Rectangle room;
+            if (isFirst)
             {
-                var numberOfMonsters = Dice.Roll("3D2") + 5;
-                for (int i = 0; i < numberOfMonsters; i++)
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
+            
+            for (int i = 0; i < numberOfMonsters; i++)
+            {
+                if (_map.DoesRoomHaveWalkableSpace(room))
                 {
-                    if (_map.DoesRoomHaveWalkableSpace(room))
+                    Point randomRoomLocation = _map.GetRandomLocationInFirstRoom(room);
+                    if (randomRoomLocation != null)
                     {
-                        Point randomRoomLocation = _map.GetRandomLocationInRoom(room);
-                        if (randomRoomLocation != null)
-                        {
-                            _map.AddMonster(ActorGenerator.CreateMonster(_level, _map.GetRandomLocationInRoom(room)));
-                        }
+                        _map.AddMonster(ActorGenerator.CreateMonster(_level, _map.GetRandomLocationInFirstRoom(room)));
                     }
                 }
             }
         }
 
-        private void PlaceItemsInForrest()
+        private void PlaceItemsInRoom(bool isFirst, int numberOfItems)
         {
-            foreach (var room in _map.Rooms)
+            Rectangle room;
+            if (isFirst)
             {
-                var numberOfItems = Dice.Roll("1D2") + 3;
-                for (int i = 0; i < numberOfItems; i++)
-                {
-                    if (_map.DoesRoomHaveWalkableSpace(room))
-                    {
-                        Point randomRoomLocation = _map.GetRandomLocationInRoom(room);
-                        if (randomRoomLocation != null)
-                        {
-                            Item item = ItemGenerator.CreateItem(_level);
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
 
-                            Point location = _map.GetRandomLocationInRoom(room);
-                            _map.AddTreasure(location.X, location.Y, item);
-                        }
+            for (int i = 0; i < numberOfItems; i++)
+            {
+                if (_map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = _map.GetRandomLocationInFirstRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        Item item = ItemGenerator.CreateItem(_level);
+
+                        Point location = _map.GetRandomLocationInFirstRoom(room);
+                        _map.AddTreasure(location.X, location.Y, item);
                     }
                 }
             }
         }
 
-        private void PlaceEquipmentInForrest()
+        private void PlaceFoodInRoom(bool isFirst, int numberOfItems, int foodQuality)
         {
-            foreach (var room in _map.Rooms)
+            Rectangle room;
+            if (isFirst)
             {
-                var numberOfItems = Dice.Roll("1D2");
-                for (int i = 0; i < numberOfItems; i++)
-                {
-                    if (_map.DoesRoomHaveWalkableSpace(room))
-                    {
-                        Point randomRoomLocation = _map.GetRandomLocationInRoom(room);
-                        if (randomRoomLocation != null)
-                        {
-                            Core.Equipment equipment;
-                            try
-                            {
-                                equipment = _equipmentGenerator.CreateEquipment();
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                return;
-                            }
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
 
-                            Point location = _map.GetRandomLocationInRoom(room);
-                            _map.AddTreasure(location.X, location.Y, equipment);
+            for (int i = 0; i < numberOfItems; i++)
+            {
+                if (_map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = _map.GetRandomLocationInFirstRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        Item item = new FoodRation(foodQuality);
+
+                        Point location = _map.GetRandomLocationInFirstRoom(room);
+                        _map.AddTreasure(location.X, location.Y, item);
+                    }
+                }
+            }
+        }
+
+        private void PlaceEquipmentInRoom(bool isFirst, int numberOfItems)
+        {
+            Rectangle room;
+            if (isFirst)
+            {
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
+
+            for (int i = 0; i < numberOfItems; i++)
+            {
+                if (_map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = _map.GetRandomLocationInFirstRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        Core.Equipment equipment;
+                        try
+                        {
+                            equipment = _equipmentGenerator.CreateEquipment();
                         }
+                        catch (InvalidOperationException)
+                        {
+                            return;
+                        }
+
+                        Point location = _map.GetRandomLocationInFirstRoom(room);
+                        _map.AddTreasure(location.X, location.Y, equipment);
+                    }
+                }
+            }
+        }
+
+        private void PlaceTrapsInRoom(bool isFirst, int numberOfTraps)
+        {
+            Rectangle room;
+            if (isFirst)
+            {
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
+
+            for (int i = 0; i < numberOfTraps; i++)
+            {
+                if (_map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = _map.GetRandomLocationInFirstRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        Trap trap = TrapGenerator.CreateTrap(_level);
+
+                        Point location = _map.GetRandomLocationInFirstRoom(room);
+                        _map.AddTreasure(location.X, location.Y, trap);
                     }
                 }
             }
@@ -384,7 +469,7 @@ namespace RogueSharpExample.Systems
         {
             foreach (var room in _map.Rooms)
             {
-                if (Dice.Roll("1D10") > 7)
+                if (Dice.Roll("1D10") > 8)
                 {
                     if (_map.DoesRoomHaveWalkableSpace(room))
                     {
@@ -413,7 +498,7 @@ namespace RogueSharpExample.Systems
         {
             foreach (var room in _map.Rooms)
             {
-                if (Dice.Roll("1D10") > 6)
+                if (Dice.Roll("1D10") > 5)
                 {
                     if (_map.DoesRoomHaveWalkableSpace(room))
                     {
@@ -481,35 +566,64 @@ namespace RogueSharpExample.Systems
             _map.AddPlayer(player);
         }
 
-        private void PlaceShopkeeper()
+        private void PlaceShopkeeperInRoom(bool isFirst)
         {
-            Rectangle room = _map.Rooms.First();
-            _map.AddShopkeeper(ActorGenerator.CreateNPC(_level, _map.GetRandomLocationInRoom(room)));
+            Rectangle room;
+            if (isFirst)
+            {
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
+
+            _map.AddShopkeeper(ActorGenerator.CreateNPC(_level, _map.GetRandomLocationInFirstRoom(room)));
         }
 
-        private void PlaceExplorer()
+        private void PlaceExplorerInRoom(bool isFirst)
         {
-            Rectangle room = _map.Rooms.First();
-            _map.AddExplorer(ActorGenerator.CreateNPC(_level, _map.GetRandomLocationInRoom(room)));
+            Rectangle room;
+            if (isFirst)
+            {
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
+
+            _map.AddExplorer(ActorGenerator.CreateNPC(_level, _map.GetRandomLocationInFirstRoom(room)));
+        }
+
+        private void PlaceMimicsInRoom(bool isFirst, int numberOfMimics)
+        {
+            Rectangle room;
+            if (isFirst)
+            {
+                room = _map.Rooms[0];
+            }
+            else
+            {
+                room = _map.Rooms.Last();
+            }
+
+            for (int i = 0; i < numberOfMimics; i++)
+            {
+                if (_map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = _map.GetRandomLocationInFirstRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        _map.AddMonster(ActorGenerator.CreateMimic(_level, _map.GetRandomLocationInFirstRoom(room)));
+                    }
+                }
+            }
         }
 
         private void PlaceBoss()
         {
             _map.AddMonster(ActorGenerator.CreateBoss(_level, _map.Rooms.Last().Center));
-        }
-
-        private void PlaceMimics()
-        {
-            Rectangle room = _map.Rooms.Last(); // hp improve me
-
-            if (_map.DoesRoomHaveWalkableSpace(room))
-            {
-                Point randomRoomLocation = _map.GetRandomLocationInRoom(room);
-                if (randomRoomLocation != null)
-                {
-                    _map.AddMonster(ActorGenerator.CreateMimic(_level, _map.GetRandomLocationInRoom(room)));
-                }
-            }
         }
     }
 }

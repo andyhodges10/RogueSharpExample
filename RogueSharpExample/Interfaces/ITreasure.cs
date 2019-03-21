@@ -3,7 +3,7 @@
     public interface ITreasure
     {
         string Name { get; set; }
-        string Name2 { get; set; }
+        string Description { get; set; }
 
         bool PickUp(IActor actor);
     }

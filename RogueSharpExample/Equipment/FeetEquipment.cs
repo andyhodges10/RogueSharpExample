@@ -13,7 +13,7 @@
             {
                 DefenseChance = 3,
                 Name = "Leather",
-                Name2 = "Boots",
+                Description = "Boots",
                 Value = 3
             };
         }
@@ -24,7 +24,7 @@
             {
                 DefenseChance = 6,
                 Name = "Chain",
-                Name2 = "Boots",
+                Description = "Boots",
                 Value = 6
             };
         }
@@ -35,7 +35,7 @@
             {
                 DefenseChance = 8,
                 Name = "Chintin",
-                Name2 = "Boots",
+                Description = "Boots",
                 Value = 9
             };
         }
@@ -45,9 +45,8 @@
             return new FeetEquipment()
             {
                 DefenseChance = 10,
-                MaxMana = 3,
                 Name = "Scaled",
-                Name2 = "Boots",
+                Description = "Boots",
                 Value = 12
             };
         }
@@ -57,9 +56,8 @@
             return new FeetEquipment()
             {
                 DefenseChance = 12,
-                MaxMana = 5,
                 Name = "Plate",
-                Name2 = "Boots",
+                Description = "Boots",
                 Value = 15
             };
         }
@@ -68,11 +66,24 @@
         {
             return new FeetEquipment()
             {
-                DefenseChance = 15,
+                DefenseChance = 12,
                 MaxMana = 5,
                 Name = "Mithril",
-                Name2 = "Boots",
+                Description = "Boots",
                 Value = 25
+            };
+        }
+
+        public static FeetEquipment DragonLord()
+        {
+            return new FeetEquipment()
+            {
+                Speed = -2,
+                DefenseChance = 15,
+                MaxMana = 5,
+                Name = "DragonLord",
+                Description = "Boots",
+                Value = 40
             };
         }
     }

@@ -13,7 +13,7 @@
             {
                 DefenseChance = 3,
                 Name = "Leather",
-                Name2 = "Hat",
+                Description = "Hat",
                 Value = 3
             };
         }
@@ -25,7 +25,7 @@
                 DefenseChance = 3,
                 MaxHealth = 2,
                 Name = "Chain",
-                Name2 = "Helmet",
+                Description = "Helmet",
                 Value = 6
             };
         }
@@ -37,7 +37,7 @@
                 DefenseChance = 4,
                 MaxHealth = 2,
                 Name = "Chintin",
-                Name2 = "Helmet",
+                Description = "Helmet",
                 Value = 9
             };
         }
@@ -46,11 +46,11 @@
         {
             return new HeadEquipment()
             {
-                DefenseChance = 5,
+                DefenseChance = 4,
                 MaxHealth = 3,
                 MaxMana = 2,
                 Name = "Scaled",
-                Name2 = "Helmet",
+                Description = "Helmet",
                 Value = 12
             };
         }
@@ -60,10 +60,10 @@
             return new HeadEquipment()
             {
                 DefenseChance = 5,
-                MaxHealth = 5,
-                MaxMana = 2,
+                MaxHealth = 3,
+                MaxMana = 4,
                 Name = "Plate",
-                Name2 = "Helmet",
+                Description = "Helmet",
                 Value = 15
             };
         }
@@ -72,13 +72,25 @@
         {
             return new HeadEquipment()
             {
+                DefenseChance = 5,
+                MaxHealth = 5,
+                MaxMana = 10,
+                Name = "Mithril",
+                Description = "Helmet",
+                Value = 25
+            };
+        }
+        public static HeadEquipment DragonLord()
+        {
+            return new HeadEquipment()
+            {
                 Defense = 1,
                 DefenseChance = 5,
                 MaxHealth = 5,
-                MaxMana = 5,
-                Name = "Mithril",
-                Name2 = "Helmet",
-                Value = 25
+                MaxMana = 15,
+                Name = "DragonLord",
+                Description = "Helmet",
+                Value = 40
             };
         }
     }

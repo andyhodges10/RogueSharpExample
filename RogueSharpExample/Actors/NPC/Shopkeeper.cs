@@ -17,7 +17,6 @@
                 Name = "Shopkeeper",
                 Color = Colors.NPC,
                 Symbol = (char)1 // ☺
-                //List<item> ItemInventory = new List<item>();
             };
         }
     }

@@ -13,7 +13,7 @@
             {
                 Defense = 1,
                 Name = "Leather",
-                Name2 = "Tunic",
+                Description = "Tunic",
                 Value = 3
             };
         }
@@ -25,7 +25,7 @@
                 Defense = 1,
                 MaxHealth = 2,
                 Name = "Chain",
-                Name2 = "Shirt",
+                Description = "Shirt",
                 Value = 6
             };
         }
@@ -37,7 +37,7 @@
                 Defense = 2,
                 MaxHealth = 2,
                 Name = "Chintin",
-                Name2 = "Mail",
+                Description = "Mail",
                 Value = 9
             };
         }
@@ -50,7 +50,7 @@
                 MaxHealth = 3,
                 MaxMana = 2,
                 Name = "Scaled",
-                Name2 = "Mail",
+                Description = "Mail",
                 Value = 12
             };
         }
@@ -63,7 +63,7 @@
                 MaxHealth = 4,
                 MaxMana = 3,
                 Name = "Plate",
-                Name2 = "Mail",
+                Description = "Mail",
                 Value = 15
             };
         }
@@ -76,7 +76,7 @@
                 MaxHealth = 5,
                 MaxMana = 5,
                 Name = "Mithril",
-                Name2 = "Mail",
+                Description = "Mail",
                 Value = 25
             };
         }
@@ -89,9 +89,9 @@
                 MaxHealth = 10,
                 MaxMana = 10,
                 Name = "DragonLord",
-                Name2 = "Armor",
+                Description = "Armor",
                 GrantsPoisonImmunity = true,
-                Value = 35
+                Value = 40
             };
         }
     }

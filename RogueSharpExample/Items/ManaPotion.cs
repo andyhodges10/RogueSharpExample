@@ -12,6 +12,7 @@ namespace RogueSharpExample.Items
             Name = "Mana Potion";
             Color = RLColor.LightBlue;
             RemainingUses = 0;
+            Symbol = '!';
         }
 
         protected override bool UseItem()

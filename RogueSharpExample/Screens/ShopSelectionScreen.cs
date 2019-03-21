@@ -9,7 +9,6 @@ namespace RogueSharpExample.Screens
     {
         public ShopSelectionScreen(int width, int height) : base("", width, height)
         {
-
         }
 
         public void Draw(RLConsole rootConsole)

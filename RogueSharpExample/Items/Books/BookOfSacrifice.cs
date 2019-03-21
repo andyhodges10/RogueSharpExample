@@ -2,7 +2,7 @@
 using RogueSharpExample.Abilities;
 using RogueSharpExample.Core;
 
-namespace RogueSharpExample.Items.Books
+namespace RogueSharpExample.Items
 {
     public class BookOfSacrifice : Item
     {
@@ -49,15 +49,15 @@ namespace RogueSharpExample.Items.Books
             }
             else if (_rarity == 2)
             {
-                LearnSacrifice = new LearnSacrifice(1, 15, 8, "Sacrifice 2");
+                LearnSacrifice = new LearnSacrifice(2, 15, 8, "Sacrifice 2");
             }
             else if (_rarity == 2)
             {
-                LearnSacrifice = new LearnSacrifice(1, 12, 10, "Sacrifice 3");
+                LearnSacrifice = new LearnSacrifice(3, 12, 10, "Sacrifice 3");
             }
             else
             {
-                LearnSacrifice = new LearnSacrifice(1, 10, 12, "Sacrifice 4");
+                LearnSacrifice = new LearnSacrifice(4, 10, 12, "Sacrifice 4");
             }
             RemainingUses--;
 

@@ -4,25 +4,23 @@ using RogueSharpExample.Interfaces;
 
 namespace RogueSharpExample.Core
 {
-    public class Item : IItem, ITreasure, IDrawable
+    public class Trap : ITrap, ITreasure, IDrawable
     {
-        public Item()
+        public Trap()
         {
-            Symbol = '!';
-            Color = RLColor.Yellow;
+            Symbol = '^';
+            Color = Colors.Trap;
         }
 
         public string Name { get; set; }
-        public string Name2 { get; set; } 
-        public int Value { get; set; }
-        public int RemainingUses { get; set; }
+        public string Description { get; set; }
 
-        public bool Use()
+        public bool Triggered()
         {
-            return UseItem();
+            return TrapTriggered();
         }
 
-        protected virtual bool UseItem()
+        protected virtual bool TrapTriggered()
         {
             return false;
         }
@@ -31,11 +29,8 @@ namespace RogueSharpExample.Core
         {
             if (actor is Player player)
             {
-                if (player.AddItem(this))
-                {
-                    Game.MessageLog.Add($"You picked up {Name}");
-                    return true;
-                }
+                Triggered();
+                return true;
             }
 
             return false;

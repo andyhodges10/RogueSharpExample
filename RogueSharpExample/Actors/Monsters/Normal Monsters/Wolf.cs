@@ -7,7 +7,7 @@ namespace RogueSharpExample.Monsters
     {
         public static Wolf Create(int level)
         {
-            int health = Dice.Roll("3D4");
+            int health = Dice.Roll("4D3") + level / 2;
             return new Wolf {
                 AttackMessages = new string[] { "The Wolf swings its paw at you", "The Wolf goes in for a bite" },
                 GreetMessages = new string[] { "The Wolf goes into an alerted stance as it notices you" },
@@ -18,7 +18,7 @@ namespace RogueSharpExample.Monsters
                 Color = Colors.WolfColor,
                 Defense = Dice.Roll("1D2") + level / 3,
                 DefenseChance = Dice.Roll("15D2"),
-                Gold = Dice.Roll("5D5"),
+                Gold = Dice.Roll("5D5") + level / 2,
                 Health = health,
                 MaxHealth = health,
                 Name = "Wolf",

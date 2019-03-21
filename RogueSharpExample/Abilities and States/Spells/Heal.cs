@@ -53,6 +53,9 @@ namespace RogueSharpExample.Abilities
                 else
                 {
                     healAmount = Dice.Roll("6D5") + 5;
+                    Hardened hardened = new Hardened(12, 0, "Hardened");
+
+                    return hardened.Perform();
                 }
 
                 Game.MessageLog.Add($"You heal yourself for {healAmount} health points");

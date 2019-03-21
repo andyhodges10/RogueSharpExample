@@ -17,6 +17,7 @@ namespace RogueSharpExample.Core
         private readonly List<Monster> _monsters;
         private readonly List<TreasurePile> _treasurePiles;
         private readonly List<Item> _items;
+        private readonly List<Trap> _traps;
         private readonly List<Actor> _shopkeepers;
         private readonly List<Actor> _explorers;
 
@@ -30,6 +31,7 @@ namespace RogueSharpExample.Core
             _monsters = new List<Monster>();
             _treasurePiles = new List<TreasurePile>();
             _items = new List<Item>();
+            _traps = new List<Trap>();
             _shopkeepers = new List<Actor>(); 
             _explorers = new List<Actor>();
         }
@@ -89,7 +91,7 @@ namespace RogueSharpExample.Core
         {
             return _explorers.FirstOrDefault(m => m.X == x && m.Y == y);
         }
-
+        
         public bool CheckForPlayer(int x, int y)
         {
             Player player = Game.Player;
@@ -191,7 +193,7 @@ namespace RogueSharpExample.Core
                 var cell = GetCell(x, y);
                 SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
 
-                Game.MessageLog.Add($"{actor.Name} opened a door");
+                Game.MessageLog.Add($"You opened a door");
             }
         }
 
@@ -212,6 +214,15 @@ namespace RogueSharpExample.Core
                 {
                     _treasurePiles.Remove(treasurePile);
                 }
+            }
+        }
+
+        public void RemoveTrap(int x, int y)
+        {
+            List<TreasurePile> trapAtLocation = _treasurePiles.Where(g => g.X == x && g.Y == y).ToList();
+            foreach (TreasurePile trap in trapAtLocation)
+            {
+                _treasurePiles.Remove(trap);
             }
         }
 
@@ -254,14 +265,39 @@ namespace RogueSharpExample.Core
             return GetRandomLocationInRoom(randomRoom);
         }
 
-        public Point GetRandomLocationInRoom(Rectangle room)
+        // actors sometimes get stuck in stairs or in player's spawn
+        public Point GetRandomLocationInFirstRoom(Rectangle room)
         {
             int x = Game.Random.Next(1, room.Width - 2) + room.X;
             int y = Game.Random.Next(1, room.Height - 2) + room.Y;
+
+            if (x == room.Center.X + 1 && y == room.Center.Y)
+            {
+                GetRandomLocationInRoom(room);
+            }
+            else if (x == room.Center.X && y == room.Center.Y)
+            {
+                GetRandomLocationInRoom(room);
+            }
+
             if (!IsWalkable(x, y))
             {
                 GetRandomLocationInRoom(room);
             }
+
+            return new Point(x, y);
+        }
+
+        public Point GetRandomLocationInRoom(Rectangle room)
+        {
+            int x = Game.Random.Next(1, room.Width - 2) + room.X;
+            int y = Game.Random.Next(1, room.Height - 2) + room.Y;
+
+            if (!IsWalkable(x, y))
+            {
+                GetRandomLocationInRoom(room);
+            }
+            
             return new Point(x, y);
         }
 
@@ -314,6 +350,11 @@ namespace RogueSharpExample.Core
             {
                 IDrawable drawableItem = item as IDrawable;
                 drawableItem?.Draw(mapConsole, this);
+            }
+            foreach (Trap trap in _traps)
+            {
+                IDrawable drawableTrap = trap as IDrawable;
+                drawableTrap?.Draw(mapConsole, this);
             }
             foreach (Actor shopkeeper in _shopkeepers)
             {
@@ -447,7 +488,7 @@ namespace RogueSharpExample.Core
                 {
                     if (cell.IsWalkable)
                     {
-                        console.Set(cell.X, cell.Y, Colors.CaveFloorFov, Colors.Background, '.');
+                        console.Set(cell.X, cell.Y, Colors.CaveFloor, Colors.Background, '.');
                     }
                     else
                     {

@@ -5,31 +5,32 @@ using RogueSharpExample.Core;
 
 namespace RogueSharpExample.Screens
 {
-    public class BuyScreen : Screen // hp implement me
+    public class BuyScreen : Screen 
     {
         readonly int _itemsPerPage = 26;
         int _currentPage = 0;
         double _totalPages = 1;
+        public Inventory shopItems;
 
         public BuyScreen(int width, int height) : base("Buy", width, height)
         {
         }
 
-        public void Draw(RLConsole rootConsole, Inventory inventory)
+        public void Draw(RLConsole rootConsole)
         {
             console.Clear();
-            /*
-            ITreasure[] items = inventory.Item.ToArray();
+            
+            ITreasure[] items = shopItems.Item.ToArray();
             _totalPages = Math.Ceiling(items.Length / (double)_itemsPerPage);
 
             string pageString = $"{_currentPage + 1}/{_totalPages}";
 
-            if (inventory.Item.Count > 0)
+            if (shopItems.Item.Count > 0)
             {
                 for (int i = 0; i < items.Length % 26; i++)
                 {
                     Item item = items[i + (_itemsPerPage * _currentPage)] as Item;
-                    console.Print(2, 2 + i, $"{(char)(97 + i)} - {item.ToString()}", RLColor.White);
+                    console.Print(2, 2 + i, $"{(char)(97 + i)} - {item.Name}, {item.Value*3}", RLColor.White);
                 }
                 console.Print((console.Width / 2) - (pageString.Length / 2), console.Height - 2, pageString, RLColor.White);
 
@@ -42,7 +43,7 @@ namespace RogueSharpExample.Screens
                     console.Print(console.Width - 2, console.Height - 1, "V", RLColor.White);
                 }
             }
-            */
+            
 
             Draw((rootConsole.Width / 2) - (console.Width / 2), (rootConsole.Height / 2) - (console.Height / 2), rootConsole);
         }

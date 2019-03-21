@@ -55,6 +55,7 @@ namespace RogueSharpExample.Abilities
                     regenAmount = Dice.Roll("6D5") + 5;
                 }
 
+                Game.MessageLog.Add($"{_level}You sacrifice {_healthCost} health points to regenerate {regenAmount} mana points");
                 player.Mana = Math.Min(player.MaxMana, player.Mana + regenAmount);
 
                 return true;

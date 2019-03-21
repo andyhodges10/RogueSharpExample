@@ -6,7 +6,7 @@ namespace RogueSharpExample.Core
     {
         public static RLColor Background = RLColor.Black;
         public static RLColor BackgroundFov1 = new RLColor(36, 40, 45);//Swatch.SecondaryDarker; // (51, 56, 64)
-        public static RLColor BackgroundFov2 = new RLColor(9, 11, 14);//Swatch.SecondaryDarkest; // (31, 38, 47)
+        public static RLColor BackgroundFov2 = new RLColor(4, 6, 9);//Swatch.SecondaryDarkest; // (31, 38, 47)
         public static RLColor LowLevelFloor = new RLColor(17, 30, 11); //Swatch.DbVegetation; // (52, 101, 36)
         public static RLColor Floor = new RLColor(22, 19, 14); // Swatch.AlternateDarkest; // (71, 62, 45)
         public static RLColor IceFloor = new RLColor(15, 21, 26); // (49, 69, 84)
@@ -43,6 +43,7 @@ namespace RogueSharpExample.Core
         public static RLColor Player = Swatch.DbLight;
         public static RLColor Gold = Swatch.DbSun;
         public static RLColor NPC = Swatch.DbSkin;
+        public static RLColor Trap = new RLColor(102, 205, 170);
         public static RLColor Healing = RLColor.LightGreen;
 
         public static RLColor LichenColor = new RLColor(102, 205, 170);
@@ -54,11 +55,12 @@ namespace RogueSharpExample.Core
         public static RLColor MimicColor = RLColor.Yellow;
         public static RLColor WolfColor = RLColor.LightGray;
         public static RLColor ViperColor = RLColor.Green;
-        public static RLColor OozeColor = new RLColor(102, 205, 170);
+        public static RLColor SludgeColor = new RLColor(102, 205, 170);
         public static RLColor SlimeColor = Swatch.DbDeepWater;
         public static RLColor OrcColor = RLColor.Green;
+        public static RLColor OgreColor = new RLColor(11, 96, 1);
         public static RLColor LizardmanColor = RLColor.LightGreen;
-        public static RLColor DragonColor = RLColor.Green;
+        public static RLColor DragonColor = new RLColor(11, 96, 1);
 
         public static RLColor HPBacking = new RLColor(75, 5, 5);
         public static RLColor MPBacking = new RLColor(5, 5, 75);

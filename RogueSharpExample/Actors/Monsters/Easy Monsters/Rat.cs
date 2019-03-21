@@ -11,24 +11,26 @@ namespace RogueSharpExample.Monsters
 
         public static Rat Create(int level)
         {
-            int health = Dice.Roll("2D4");
+            int health = Dice.Roll("4D2") + level / 2;
             return new Rat {
                 AttackMessages = new string[] { "The Rat-ant opens its mouth and charges you" },
                 GreetMessages = new string[] { "The giant Rat-ant looks menacingly at you" },
                 DeathMessages = new string[] { "The Rat-ant squaks loudly and falls over dead" },
-                Attack = Dice.Roll("1D2") + level / 3,
+                Attack = Dice.Roll("1D2") + level / 2,
                 AttackChance = Dice.Roll("20D3"),
                 Awareness = 6,
                 Color = Colors.RatColor,
-                Defense = Dice.Roll("1D1") + level / 3,
-                DefenseChance = Dice.Roll("10D2"),
-                Gold = Dice.Roll("5D3"),
+                Defense = 1 + level / 3,
+                DefenseChance = Dice.Roll("12D2"),
+                Gold = Dice.Roll("5D3") + level / 2,
                 Health = health,
                 MaxHealth = health,
                 Name = "Rat-ant",
-                Speed = 11,
+                Speed = 14 - level / 3,
                 Experience = Dice.Roll("1D2") + level / 2,
-                PoisonDamage = 2,
+                PoisonDamage = 13,
+                PoisonChance = 50,
+                PoisonLength = 5,
                 IsPoisonedImmune = true,
                 Symbol = 'r'
             };

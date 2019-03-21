@@ -11,7 +11,7 @@ namespace RogueSharpExample.Monsters
 
         public static Viper Create(int level)
         {
-            int health = Dice.Roll("4D3");
+            int health = Dice.Roll("5D3") + level / 2;
             return new Viper {
                 AttackMessages = new string[] { "The Viper goes in for a bite" },
                 GreetMessages = new string[] { "The Viper hisses at you" },
@@ -22,13 +22,15 @@ namespace RogueSharpExample.Monsters
                 Color = Colors.ViperColor,
                 Defense = Dice.Roll("1D2") + level / 3,
                 DefenseChance = Dice.Roll("10D3"),
-                Gold = Dice.Roll("5D6"),
+                Gold = Dice.Roll("5D6") + level / 2,
                 Health = health,
                 MaxHealth = health,
                 Name = "Viper",
-                Speed = 14,
+                Speed = 14 - level / 3,
                 Experience = Dice.Roll("2D3") + level / 2,
-                PoisonDamage = 3,
+                PoisonDamage = 4,
+                PoisonChance = 75,
+                PoisonLength = 6,
                 IsPoisonedImmune = true,
                 Symbol = 'V'
             };

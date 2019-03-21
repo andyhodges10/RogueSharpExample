@@ -11,23 +11,23 @@ namespace RogueSharpExample.Monsters
 
         public static Mimic Create(int level)
         {
-            int health = Dice.Roll("3D4");
+            int health = Dice.Roll("5D3") + level / 2;
             return new Mimic
             {
                 GreetMessages = new string[] { "The Mimic rapidly shifts it's shape" },
                 DeathMessages = new string[] { "The Mimic produces a booming cry and reveals its true form as it dies" },
-                Attack = Dice.Roll("1D3") + level / 3,
-                AttackChance = Dice.Roll("25D3"),
+                Attack = Dice.Roll("2D3") + level / 2,
+                AttackChance = Dice.Roll("12D6"),
                 Awareness = 10,
                 Color = Colors.MimicColor,
                 Defense = Dice.Roll("1D2") + level / 3,
                 DefenseChance = Dice.Roll("10D3"),
-                Gold = Dice.Roll("5D5"),
+                Gold = Dice.Roll("5D5") + level / 2,
                 Health = health,
                 MaxHealth = health,
                 Name = "Plate Body-Armor",
                 Speed = 10,
-                Experience = Dice.Roll("3D2") + level / 2,
+                Experience = Dice.Roll("3D3") + level / 2,
                 PoisonDamage = 3,
                 IsPoisonedImmune = true,
                 IsMimicInHiding = true,

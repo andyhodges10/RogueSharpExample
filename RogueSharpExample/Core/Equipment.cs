@@ -21,7 +21,7 @@ namespace RogueSharpExample.Core
         public int MaxHealth { get; set; }
         public int MaxMana { get; set; }
         public string Name { get; set; }
-        public string Name2 { get; set; }
+        public string Description { get; set; }
         public int Speed { get; set; }
         public bool GrantsPoisonImmunity { get; set; }
         public bool IsEnhanced { get; set; } // Currently unused
@@ -29,7 +29,7 @@ namespace RogueSharpExample.Core
 
         protected bool Equals(Equipment other)
         {
-            return Attack == other.Attack && AttackChance == other.AttackChance && Awareness == other.Awareness && Defense == other.Defense && DefenseChance == other.DefenseChance && MaxHealth == other.MaxHealth && MaxMana == other.MaxMana && string.Equals(Name, other.Name) && string.Equals(Name2, other.Name2) && Speed == other.Speed;
+            return Attack == other.Attack && AttackChance == other.AttackChance && Awareness == other.Awareness && Defense == other.Defense && DefenseChance == other.DefenseChance && MaxHealth == other.MaxHealth && MaxMana == other.MaxMana && string.Equals(Name, other.Name) && string.Equals(Description, other.Description) && Speed == other.Speed;
         }
 
         public override bool Equals(object obj)
@@ -61,7 +61,7 @@ namespace RogueSharpExample.Core
                 hashCode = (hashCode * 397) ^ MaxHealth;
                 hashCode = (hashCode * 397) ^ MaxMana;
                 hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Name2 != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Description != null ? Name.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Speed;
                 hashCode = (hashCode * 397) ^ Value;
                 return hashCode;
@@ -88,11 +88,11 @@ namespace RogueSharpExample.Core
                     actor.Head = this as HeadEquipment;
                     actor.Health += newHeadEquipment.MaxHealth;
                     actor.Mana += newHeadEquipment.MaxMana;
-                    Game.MessageLog.Add($"You picked up a {Name} helmet");
+                    Game.MessageLog.Add($"You picked up a {Name} {Description}");
                 }
                 else
                 {
-                    Game.MessageLog.Add($"The {Name} helmet is weaker then {actor.Head.Name} helmet, selling");
+                    Game.MessageLog.Add($"The {Name} {Description} is weaker then {actor.Head.Name} {actor.Head.Description}, selling");
                     actor.Gold += newHeadEquipment.Value;
                 }
                 return true;
@@ -107,11 +107,11 @@ namespace RogueSharpExample.Core
                     actor.IsPoisonedImmune = newBodyEquipment.GrantsPoisonImmunity;
                     actor.Health += newBodyEquipment.MaxHealth;
                     actor.Mana += newBodyEquipment.MaxMana;
-                    Game.MessageLog.Add($"You picked up {Name} body armor");
+                    Game.MessageLog.Add($"You picked up {Name} {Description}");
                 }
                 else
                 {
-                    Game.MessageLog.Add($"The {Name} body armor is weaker then {actor.Body.Name} body armor, selling");
+                    Game.MessageLog.Add($"The {Name} {Description} is weaker then {actor.Body.Name} {actor.Body.Description}, selling");
                     actor.Gold += newBodyEquipment.Value;
                 }
                 return true;
@@ -138,16 +138,16 @@ namespace RogueSharpExample.Core
             if (this is FeetEquipment)
             {
                 FeetEquipment newFeetEquipment = this as FeetEquipment;
-                if (newFeetEquipment.Value >= actor.Feet.Value)
+                if (newFeetEquipment.Value > actor.Feet.Value)
                 {
                     actor.Feet = this as FeetEquipment;
                     actor.Health += newFeetEquipment.MaxHealth;
                     actor.Mana += newFeetEquipment.MaxMana;
-                    Game.MessageLog.Add($"You picked up {Name} boots");
+                    Game.MessageLog.Add($"You picked up {Name} {Description}");
                 }
                 else
                 {
-                    Game.MessageLog.Add($"The {Name} boots is weaker then {actor.Feet.Name} boots, selling");
+                    Game.MessageLog.Add($"The {Name} {Description} is weaker then {actor.Feet.Name} {actor.Feet.Description}, selling");
                     actor.Gold += newFeetEquipment.Value;
                 }
                 return true;

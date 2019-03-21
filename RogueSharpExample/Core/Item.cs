@@ -4,32 +4,48 @@ using RogueSharpExample.Interfaces;
 
 namespace RogueSharpExample.Core
 {
-    public class Gold : ITreasure, IDrawable
+    public class Item : IItem, ITreasure, IDrawable
     {
-        public int Amount { get; set; }
-        public string Name { get; set; }
-        public string Name2 { get; set; }
-
-        public Gold(int amount)
+        public Item()
         {
-            Amount = amount;
-            Symbol = '$';
+            Symbol = '!';
             Color = RLColor.Yellow;
+        }
 
-            Name = Amount + " gold";
+        public string Name { get; set; }
+        public string Description { get; set; } 
+        public int Value { get; set; }
+        public int RemainingUses { get; set; }
+
+        public bool Use()
+        {
+            return UseItem();
+        }
+
+        protected virtual bool UseItem()
+        {
+            return false;
         }
 
         public bool PickUp(IActor actor)
         {
-            actor.Gold += Amount;
-            Game.MessageLog.Add($"{actor.Name} picked up {Amount} gold");
-            return true;
+            if (actor is Player player)
+            {
+                if (player.AddItem(this))
+                {
+                    Game.MessageLog.Add($"You picked up {Name}");
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public RLColor Color { get; set; }
         public char Symbol { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+
         public void Draw(RLConsole console, IMap map)
         {
             if (!map.IsExplored(X, Y))

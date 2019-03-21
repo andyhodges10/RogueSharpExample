@@ -9,8 +9,8 @@ namespace RogueSharpExample.Items
         {
             Name = "Enhance Armor Scroll";
             RemainingUses = 1;
-            Value = 250;
-            Symbol = '?';
+            Value = 200;
+            Symbol = '%';
         }
 
         protected override bool UseItem()

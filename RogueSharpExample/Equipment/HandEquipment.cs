@@ -43,7 +43,7 @@ namespace RogueSharpExample.Equipment
                 Attack = 2,
                 AttackChance = 15,
                 Name = "Axe",
-                Value = 10
+                Value = 12
             };
         }
 
@@ -67,23 +67,37 @@ namespace RogueSharpExample.Equipment
                 AttackChance = 15,
                 MaxMana = 2,
                 Name = "Dragonbane",
-                Value = 20
+                Value = 30
             };
         }
 
-        public static HandEquipment Excalibur()
+        public static HandEquipment DragonLord()
         {
             return new HandEquipment
             {
                 Attack = 4,
                 AttackChance = 20,
                 MaxMana = 5,
-                AtkAbility = new InflictPoison(70, 5, 2, 0, "Inflict Poison"),
-                Name = "Excalibur",
-                Speed = 1,
-                Value = 30
+                AtkAbility = new InflictPoison(70, 6, 2, "Inflict Poison"),
+                Name = "DragonLord",
+                Speed = -1,
+                Value = 70
             };
         }
-        
+
+        public static HandEquipment Vampiric()
+        {
+            return new HandEquipment
+            {
+                Attack = 4,
+                AttackChance = 20,
+                MaxMana = 5,
+                AtkAbility = new Lifesteal(75, "Lifesteal"),
+                Name = "Vampiric",
+                Speed = -1,
+                Value = 70
+            };
+        }
+
     }
 }

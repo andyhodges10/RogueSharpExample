@@ -28,7 +28,6 @@ namespace RogueSharpExample.Items
                 Game.MessageLog.Add($"You consume a {Name}", Colors.Healing);
                 Hardened hardened = new Hardened(12, 0, "Hardened");
                 RemainingUses--;
-
                 
                 return hardened.Perform();
             }

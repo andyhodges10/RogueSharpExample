@@ -16,9 +16,9 @@ namespace RogueSharpExample.Items
         protected override bool UseItem()
         {
             DungeonMap map = Game.DungeonMap;
-            Game.MessageLog.Add($"{Game.Player.Name} reads a {Name} and gains knowledge of the surrounding area");
+            Game.MessageLog.Add($"You read the {Name} and gains knowledge of the surrounding area");
 
-            foreach (Cell cell in map.GetAllCells())
+            foreach (ICell cell in map.GetAllCells())
             {
                 if (cell.IsWalkable)
                 {

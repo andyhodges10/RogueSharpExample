@@ -8,14 +8,12 @@ namespace RogueSharpExample.Abilities
         private readonly int _poisonChance;
         private readonly int _poisonLength;
         private readonly int _poisonDamage;
-        private readonly int _manaCost;
 
-        public InflictPoison(int poisonChance, int poisonLength, int poisonDamage, int manaCost, string name)
+        public InflictPoison(int poisonChance, int poisonLength, int poisonDamage, string name)
         {
             _poisonChance = poisonChance;
             _poisonLength = poisonLength;
             _poisonDamage = poisonDamage;
-            _manaCost = manaCost;
             Name = name;
         }
 

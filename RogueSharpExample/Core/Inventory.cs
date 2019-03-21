@@ -44,6 +44,40 @@ namespace RogueSharpExample.Core
             }
         }
 
+        public bool PurchaseItemInSlot(char slot)
+        {
+            int index = slot - 97;
+
+            if (index > Item.Count())
+            {
+                return false;
+            }
+
+            try
+            {
+                Item i = Item.ElementAt(index) as Item;
+                if (i.Value * 3 < Game.Player.Gold)
+                {
+                    Game.Player.Gold -= i.Value * 3;
+                    Game.MessageLog.Add($"You purchased the {i.Name} for {i.Value * 3} gold pieces");
+                    Game.Player.Inventory.AddInventoryItem(i);
+                    Item.RemoveAt(index);
+
+                    return true;
+                }
+                else
+                {
+                    Game.MessageLog.Add($"You are too broke to afford the {i.Name} it costs {i.Value * 3} gold pieces");
+
+                    return true;
+                }
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                return false;
+            }
+        }
+
         public bool SellItemInSlot(char slot)
         {
             int index = slot - 97;
