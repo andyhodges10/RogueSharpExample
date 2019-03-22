@@ -81,7 +81,7 @@ namespace RogueSharpExample.Systems
                 else if (keyPress.Key == RLKey.I)
                 {
                     Game.IsInventoryScreenShowing = true;
-                    Game.TogglePopupScreen();
+                    Game.TogglePopupUpdate();
                     didPlayerAct = true;
                 }
                 else if (keyPress.Key == RLKey.Insert) // hp Debug
@@ -174,7 +174,7 @@ namespace RogueSharpExample.Systems
         }
     }
 
-    public class InputSystemPopupScreen : IInputSystem // hp complete me
+    public class InputSystemPopupScreen : IInputSystem
     {
         public bool GetInput(RLRootConsole rootConsole, CommandSystem commandSystem)
         {
@@ -198,27 +198,27 @@ namespace RogueSharpExample.Systems
                 if (exitMenu && Game.IsInventoryScreenShowing == true)
                 {
                     Game.IsInventoryScreenShowing = false;
-                    Game.TogglePopupScreen();
+                    Game.TogglePopupUpdate();
                 }
                 else if (exitMenu && Game.IsDialogScreenShowing == true)
                 {
                     Game.IsDialogScreenShowing = false;
-                    Game.TogglePopupScreen();
+                    Game.TogglePopupUpdate();
                 }
                 else if (exitMenu && Game.IsShopSelectionScreenShowing == true)
                 {
                     Game.IsShopSelectionScreenShowing = false;
-                    Game.TogglePopupScreen();
+                    Game.ToggleShopSelectionUpdate();
                 }
                 else if (exitMenu && Game.IsBuyScreenShowing == true)
                 {
                     Game.IsBuyScreenShowing = false;
-                    Game.TogglePopupScreen();
+                    Game.TogglePopupUpdate();
                 }
                 else if (exitMenu && Game.IsSellScreenShowing == true)
                 {
                     Game.IsSellScreenShowing = false;
-                    Game.TogglePopupScreen();
+                    Game.TogglePopupUpdate();
                 }
 
                 if ("abcdefghijklmnopqrstuvwxyz".Contains(commandChar.ToString()) && Game.IsInventoryScreenShowing == true)

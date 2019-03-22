@@ -32,7 +32,6 @@ namespace RogueSharpExample
         private static readonly int _popupWidth = 58; // currently shared with all popup screens
         private static readonly int _popupHeight = 40;
         private static readonly int _dialogHeight = 9;
-        private static readonly int _shopSelectionHeight = 16; // unused
 
         private static RLRootConsole _rootConsole;
         private static RLConsole _mapConsole;
@@ -66,6 +65,7 @@ namespace RogueSharpExample
 
         public static void Main()
         {
+            //Console.WriteLine("Good luck, you will need it.");
             string fontFileName = "terminal8x8.png";
             int seed = (int)DateTime.UtcNow.Ticks;
             string consoleTitle = $"RoguelikeGame - Level {MapLevel}";
@@ -87,7 +87,7 @@ namespace RogueSharpExample
             InputSystem = new InputSystemPlaying(); 
             InventoryScreen = new InventoryScreen(_popupWidth, _popupHeight);
             DialogScreen = new DialogScreen(_popupWidth, _dialogHeight);
-            ShopSelectionScreen = new ShopSelectionScreen(_popupWidth, _shopSelectionHeight);
+            ShopSelectionScreen = new ShopSelectionScreen(_popupWidth, _dialogHeight);
             BuyScreen = new BuyScreen(_popupWidth, _popupHeight);
             SellScreen = new SellScreen(_popupWidth, _popupHeight);
 
@@ -295,9 +295,9 @@ namespace RogueSharpExample
             return false;
         }
 
-        public static void TogglePopupScreen()
+        public static void TogglePopupUpdate()
         {
-            if (IsInventoryScreenShowing || IsDialogScreenShowing || IsShopSelectionScreenShowing || IsBuyScreenShowing || IsSellScreenShowing)
+            if (IsInventoryScreenShowing || IsDialogScreenShowing || IsBuyScreenShowing || IsSellScreenShowing)
             {
                 InputSystem = new InputSystemPopupScreen();
                 _rootConsole.Update -= OnRootConsoleUpdate;
@@ -310,6 +310,20 @@ namespace RogueSharpExample
                 _rootConsole.Update -= OnRootConsoleUpdatePopupScreen;
                 _rootConsole.Update += OnRootConsoleUpdate;
                 _renderRequired = true;
+            }
+        }
+
+        public static void ToggleShopSelectionUpdate()
+        {
+            if (IsShopSelectionScreenShowing)
+            {
+                _rootConsole.Update -= OnRootConsoleUpdate;
+                _rootConsole.Update += OnShopSelectionUpdate;
+            }
+            else
+            {
+                _rootConsole.Update -= OnShopSelectionUpdate;
+                _rootConsole.Update += OnRootConsoleUpdate;
             }
         }
 
@@ -397,9 +411,40 @@ namespace RogueSharpExample
                     _rootConsole.Update += OnStoryUpdate;
                     _rootConsole.Render += OnStoryRender;
                 }
-                else if (introKeyPress.Key == RLKey.E || introKeyPress.Key == RLKey.X)
+                else if (introKeyPress.Key == RLKey.E || introKeyPress.Key == RLKey.X || introKeyPress.Key == RLKey.Escape)
                 {
                     _rootConsole.Close();
+                }
+            }
+            else
+            {
+                _renderRequired = true;
+            }
+        }
+
+        private static void OnShopSelectionUpdate(object sender, UpdateEventArgs e)
+        {
+            RLKeyPress selectionKeyPress = _rootConsole.Keyboard.GetKeyPress();
+            if (selectionKeyPress != null)
+            {
+                if (selectionKeyPress.Key == RLKey.B)
+                {
+                    IsShopSelectionScreenShowing = false;
+                    ToggleShopSelectionUpdate();
+                    IsBuyScreenShowing = true;
+                    TogglePopupUpdate();
+                }
+                else if (selectionKeyPress.Key == RLKey.S)
+                {
+                    IsShopSelectionScreenShowing = false;
+                    ToggleShopSelectionUpdate();
+                    IsSellScreenShowing = true;
+                    TogglePopupUpdate();
+                }
+                else if (selectionKeyPress.Key == RLKey.E || selectionKeyPress.Key == RLKey.X || selectionKeyPress.Key == RLKey.Escape)
+                {
+                    IsShopSelectionScreenShowing = false;
+                    ToggleShopSelectionUpdate();
                 }
             }
             else
@@ -452,6 +497,12 @@ namespace RogueSharpExample
                 _rootConsole.Print(
                     (int)(_rootConsole.Width * 0.5) - 12,
                     (int)(_rootConsole.Height * 0.5) + 4,
+                    "L - Last Screen",
+                    Swatch.DbBlood // previously: Swatch.DbSun
+                );
+                _rootConsole.Print(
+                    (int)(_rootConsole.Width * 0.5) - 12,
+                    (int)(_rootConsole.Height * 0.5) + 6,
                     "E - Exit Game",
                     Swatch.DbBlood // previously: Swatch.DbSun
                 );
@@ -470,6 +521,13 @@ namespace RogueSharpExample
                     Player.Health = Player.MaxHealth;
                     Player.Hunger = 1200;
                     IsGameOver = false;
+                    _rootConsole.Update -= GameOverUpdate;
+                    _rootConsole.Render -= GameOverRender;
+                    _rootConsole.Update += OnRootConsoleUpdate;
+                    _rootConsole.Render += OnRootConsoleRender;
+                }
+                else if (introKeyPress.Key == RLKey.L)
+                {
                     _rootConsole.Update -= GameOverUpdate;
                     _rootConsole.Render -= GameOverRender;
                     _rootConsole.Update += OnRootConsoleUpdate;

@@ -84,8 +84,6 @@ namespace RogueSharpExample.Systems
             Actor shopkeeper = Game.DungeonMap.GetShopkeeperAt(x, y);
             if (shopkeeper != null) // debug
             {
-                
-                Game.MessageLog.Add("What are you buying? (Debug)");
                 if (Game.MapLevel == 4)
                 {
                     if (shopkeeper.Inventory == null)
@@ -129,11 +127,12 @@ namespace RogueSharpExample.Systems
                 
                 Game.Shopkeeper = shopkeeper;
 
-                //Game.IsSellScreenShowing = true; // debug
+                
                 Game.BuyScreen.shopItems = shopkeeper.Inventory;
-                Game.IsBuyScreenShowing = true;
-                //Game.IsShopSelectionScreenShowing = true;
-                Game.TogglePopupScreen();
+                
+                Game.IsShopSelectionScreenShowing = true;
+                Game.ToggleShopSelectionUpdate();
+                
                 return true;
             }
 
@@ -152,7 +151,7 @@ namespace RogueSharpExample.Systems
                 }
 
                 Game.IsDialogScreenShowing = true;
-                Game.TogglePopupScreen();
+                Game.TogglePopupUpdate();
                 return true;
             }
 
@@ -467,8 +466,6 @@ namespace RogueSharpExample.Systems
                 }
             }
 
-            
-
             IsPlayerTurn = false;
             player.Tick();
         }
@@ -479,7 +476,7 @@ namespace RogueSharpExample.Systems
             if (itemWasUsed)
             {
                 Game.IsInventoryScreenShowing = false;
-                Game.TogglePopupScreen();
+                Game.TogglePopupUpdate();
             }
             return itemWasUsed;
         }
@@ -490,7 +487,7 @@ namespace RogueSharpExample.Systems
             if (itemWasPurchased)
             {
                 Game.IsBuyScreenShowing = false;
-                Game.TogglePopupScreen();
+                Game.TogglePopupUpdate();
             }
             return itemWasPurchased;
         }
@@ -501,7 +498,7 @@ namespace RogueSharpExample.Systems
             if (itemWasSold)
             {
                 Game.IsSellScreenShowing = false;
-                Game.TogglePopupScreen();
+                Game.TogglePopupUpdate();
             }
             return itemWasSold;
         }
